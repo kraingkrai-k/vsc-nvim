@@ -1,5 +1,5 @@
 ## clone repo
-- git clone https://github.com/ ~/.config/nvim 
+- git clone https://github.com/kraingkrai-k/vsc-nvim.git ~/.config/nvim 
 
 ## update zsh
 - export MYVIMRC=~/.config/nvim/init.lua
