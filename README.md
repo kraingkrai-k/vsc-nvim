@@ -8,19 +8,16 @@
 # settings.json
 ```
   "workbench.colorCustomizations": {
-      "editorSuggestWidget.selectedBackground": "#231739",
-      "sideBar.background": "#191521",
-      "list.activeSelectionBackground": "#231739",
-      "list.inactiveSelectionBackground": "#231739",
-      "list.focusBackground": "#231739",
-      "list.hoverBackground": "#231739",
-      "terminalCursor.foreground": "#1bb66e",
-       // "editorCursor.foreground": "#56B6C2",
-        // "editorCursor.foreground": "#98C379",
-      "editorCursor.foreground": "#E5C07B",
-        // "editorCursor.foreground": "#E06C75",
-        // "editorCursor.foreground": "#C678DD",
-        // "editorCursor.foreground": "#FFFFFF"
+    "list.activeSelectionBackground": "#4c4c4c", // Darker background color for selected item
+    "list.activeSelectionForeground": "#ffffff", // White or lighter text color for selected item
+    "list.inactiveSelectionBackground": "#3a3a3a", // Background for inactive selection (not focused)
+    "list.inactiveSelectionForeground": "#ffffff", // Text color for inactive selection
+    "list.hoverBackground": "#505050", // Background color when hovering over items
+    "list.hoverForeground": "#ffffff", // Text color when hovering over items
+    "list.activeSelectionBorder": "#5f9ea0", // Border color for active selection (e.g., a teal border)
+    "list.hoverBorder": "#5f9ea0", // Border color when hovering over items
+    "terminalCursor.foreground": "#1bb66e",
+    "editorCursor.foreground": "#E5C07B"
   },
   "extensions.experimental.affinity": {
       "asvetliakov.vscode-neovim": 1
@@ -36,6 +33,12 @@
   "editor.fontLigatures": "'calt', 'liga', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'ss09'",
   "editor.fontSize": 14,
   "editor.lineHeight": 19,
+```
+
+### Zenmode
+```
+    "zenMode.centerLayout": false,
+    "zenMode.hideLineNumbers": false,
 ```
 
 ### set up macOS
