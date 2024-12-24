@@ -24,6 +24,7 @@
   },
   "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
   "vscode-neovim.neovimInitVimPaths.darwin": "$HOME/.config/nvim/init.lua",
+  "editor.cursorSmoothCaretAnimation": "on",
 ```
 
 ### Fonts
@@ -52,6 +53,9 @@
 >  - restart mac
 >
 
+
+### Custom font
+- brew install font-jetbrains-mono-nerd-font
 
 ### vs-code keyboard
 - cmd + , 
