@@ -1,5 +1,7 @@
--- options.lua
 -- การตั้งค่าทั่วไปสำหรับ Neovim
+-- เพิ่มการตั้งค่า timeout
+vim.opt.timeout = true
+vim.opt.timeoutlen = 300
 
 -- การตั้งค่าพื้นฐาน
 vim.opt.number = true           -- แสดงเลขบรรทัด
