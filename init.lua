@@ -1,87 +1,68 @@
-print("HI KK :)")
 
+-- โหลดการตั้งค่าจากโมดูลต่างๆ
+require('options')  -- การตั้งค่าทั่วไป
+require('keymaps')  -- key mappings
 
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+-- ไฟล์หลักสำหรับการตั้งค่า Neovim
+vim.cmd [[
+  call plug#begin('~/.local/share/nvim/plugged')
+  
+  Plug 'tpope/vim-surround'               " จัดการกับวงเล็บและเครื่องหมายรอบข้อความ
+  Plug 'tpope/vim-repeat'                 " ทำให้ . สามารถทำซ้ำคำสั่งจาก plugin ได้
+  Plug 'vim-scripts/ReplaceWithRegister'  " แทนที่ด้วย register (gr)
+  Plug 'phaazon/hop.nvim'                 " การเคลื่อนที่แบบ easymotion
+  
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+  call plug#end()
+]]
 
--- [[ Setting options ]]
--- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
+if pcall(require, 'hop') then
+    -- ตั้งค่า hop.nvim ให้ทำงานเร็วขึ้น
+    -- require('hop').setup({
+    --     multi_windows = false,
+    -- })
+    require('hop').setup({
+        keys = 'etovxqpdygfblzhckisuran', -- ตัวอักษรที่พบบ่อยและกดง่ายขึ้นก่อน
+        jump_on_sole_occurrence = true,    -- กระโดดทันทีถ้ามีผลลัพธ์เดียว
+        case_insensitive = true,           -- ไม่สนใจตัวพิมพ์ใหญ่/เล็ก
+        multi_windows = false,             -- จำกัดขอบเขตเฉพาะหน้าต่างปัจจุบัน
+        current_line_only = false,         -- ค้นหาทั่วทั้งหน้าจอ (ตั้งเป็น true เพื่อความเร็วเพิ่มเติม)
+        uppercase_labels = true,           -- ใช้ตัวพิมพ์ใหญ่สำหรับฉลาก (มองเห็นง่ายขึ้น)
+        teasing = false,                   -- ลดเอฟเฟกต์ต่างๆ เพื่อความเร็ว
+    })
+    
+    vim.cmd([[
+        " สีที่เข้ากับ One Dark Pro (Dark Theme)
+        highlight HopNextKey guifg=#c678dd gui=bold ctermfg=198 cterm=bold
+        highlight HopNextKey1 guifg=#56b6c2 gui=bold ctermfg=45 cterm=bold
+        highlight HopNextKey2 guifg=#61afef ctermfg=33
+        highlight HopUnmatched guifg=#5c6370 ctermfg=242
+    ]])
+    
+    vim.api.nvim_set_keymap('n', '<space><space>w', "<cmd>HopWord<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<space><space>l', "<cmd>HopLine<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<space><space>c', "<cmd>HopChar1<CR>", { noremap = true, silent = true })
+    
+     -- เพิ่ม key mappings ที่มีประโยชน์
+    vim.api.nvim_set_keymap('n', '<space><space>/', "<cmd>HopPattern<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<space><space>j', "<cmd>HopLineAC<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<space><space>k', "<cmd>HopLineBC<CR>", { noremap = true, silent = true })
 
--- Make line numbers default
-vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+     -- คำสั่งสำหรับการค้นหาเฉพาะบรรทัดปัจจุบัน (เร็วกว่า)
+    vim.api.nvim_set_keymap('n', '<space><space>f', "<cmd>lua require('hop').hint_char1({ current_line_only = true })<CR>", { noremap = true, silent = true })
 
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+    -- คำสั่งสำหรับการค้นหาในช่วงที่มองเห็นเท่านั้น (เร็วกว่า)
+    vim.api.nvim_set_keymap('n', '<space><space>v', "<cmd>lua require('hop').hint_words({ current_line_only = false, hint_position = require('hop.hint').HintPosition.END })<CR>", { noremap = true, silent = true })
 
--- Don't show the mode, since it's already in the status line
-vim.opt.showmode = false
-
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
-
-vim.opt.clipboard = 'unnamedplus'
-
--- Enable break indent
-vim.opt.breakindent = true
-
--- Save undo history
-vim.opt.undofile = true
-
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
--- Keep signcolumn on by default
-vim.opt.signcolumn = 'yes'
-
--- Decrease update time
-vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
--- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
-
--- Configure how new splits should be opened
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
--- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
-
--- Show which line your cursor is on
-vim.opt.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
-
--- Load general keymaps
-require('keymaps.general')
-
-if vim.g.vscode then
-  -- VS Code-specific keymaps
-  require('keymaps.vs-code')
+    vim.notify("hop.nvim loaded successfully!")
 else
-  -- Neovim-specific keymaps (if applicable)
+    vim.notify("Failed to load hop.nvim")
+end
+
+-- ถ้าอยู่ใน VS Code ให้โหลดการตั้งค่าเฉพาะสำหรับ VS Code
+if vim.g.vscode then
+    
+    -- การตั้งค่าเฉพาะสำหรับเมื่อใช้ใน VS Code
+    vim.notify("Neovim running inside VS Code")
+    print("HI KK :)")
 end
