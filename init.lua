@@ -10,7 +10,6 @@ vim.cmd [[
   Plug 'tpope/vim-repeat'                 " ทำให้ . สามารถทำซ้ำคำสั่งจาก plugin ได้
   Plug 'vim-scripts/ReplaceWithRegister'  " แทนที่ด้วย register (gr)
   Plug 'phaazon/hop.nvim'                 " การเคลื่อนที่แบบ easymotion
-  
 
   call plug#end()
 ]]
