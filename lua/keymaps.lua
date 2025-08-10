@@ -63,16 +63,6 @@ if vim.g.vscode then
     -- สลับไปยัง editor group ก่อนหน้า
     map('n', '<leader>wp', "<Cmd>call VSCodeNotify('workbench.action.moveEditorToPreviousGroup')<CR>")
 
-    -- Breadcrumbs
-    -- เปิด/เลือก Breadcrumbs
-    -- map('n', '<leader>bb', "<Cmd>call VSCodeNotify('breadcrumbs.focusAndSelect')<CR>")
-    -- -- นำทางไปยัง parent symbol
-    -- map('n', '<leader>bp', "<Cmd>call VSCodeNotify('breadcrumbs.focusPrevious')<CR>")
-    -- -- นำทางไปยัง child symbol
-    -- map('n', '<leader>bn', "<Cmd>call VSCodeNotify('breadcrumbs.focusNext')<CR>")
-    -- -- แสดง siblings ของ symbol ปัจจุบัน
-    -- map('n', '<leader>bs', "<Cmd>call VSCodeNotify('breadcrumbs.revealFocused')<CR>")
-
     -- LSP & Code Navigation
     map('n', 'gd', "<Cmd>call VSCodeNotify('editor.action.revealDefinition')<CR>")
     map('n', 'gr', "<Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>")
@@ -120,8 +110,6 @@ if vim.g.vscode then
     map('n', '<leader>z', "<Cmd>call VSCodeNotify('workbench.action.toggleZenMode')<CR>")
     -- เปิด/ปิด Centered Layout
     map('n', '<leader>cl', "<Cmd>call VSCodeNotify('workbench.action.toggleCenteredLayout')<CR>")
-    -- ซ่อน/แสดง Activity Bar
-    map('n', '<leader>ha', "<Cmd>call VSCodeNotify('workbench.action.toggleActivityBarVisibility')<CR>")
 
     -- extension project manager
     -- เปิดรายการโปรเจค
