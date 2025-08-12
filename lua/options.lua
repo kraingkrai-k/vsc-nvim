@@ -1,2 +1,0 @@
--- Modern Neovim options configuration
--- This file will be moved to lua/config/options.lua

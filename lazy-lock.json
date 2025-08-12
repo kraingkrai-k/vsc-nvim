@@ -1,7 +1,9 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
+  "ReplaceWithRegister": { "branch": "master", "commit": "832efc23111d19591d495dc72286de2fb0b09345" },
   "flash.nvim": { "branch": "main", "commit": "3c942666f115e2811e959eabbdd361a025db8b63" },
   "harpoon": { "branch": "harpoon2", "commit": "ed1f853847ffd04b2b61c314865665e1dadf22c7" },
+  "indent-blankline.nvim": { "branch": "master", "commit": "005b56001b2cb30bfa61b7986bc50657816ba4ba" },
   "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
   "mini.icons": { "branch": "main", "commit": "b8f6fa6f5a3fd0c56936252edcd691184e5aac0c" },
   "neoconf.nvim": { "branch": "main", "commit": "c8d0c3c061fb56ff1bdf90ce53ce60f9734de4f8" },
@@ -15,5 +17,7 @@
   "telescope-live-grep-args.nvim": { "branch": "master", "commit": "b80ec2c70ec4f32571478b501218c8979fab5201" },
   "telescope-ui-select.nvim": { "branch": "master", "commit": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2" },
   "telescope.nvim": { "branch": "0.1.x", "commit": "a0bbec21143c7bc5f8bb02e0005fa0b982edc026" },
+  "vim-repeat": { "branch": "master", "commit": "65846025c15494983dafe5e3b46c8f88ab2e9635" },
+  "vim-surround": { "branch": "master", "commit": "3d188ed2113431cf8dac77be61b842acb64433d9" },
   "which-key.nvim": { "branch": "main", "commit": "370ec46f710e058c9c1646273e6b225acf47cbed" }
 }
