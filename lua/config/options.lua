@@ -95,12 +95,27 @@ opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,te
 
 -- Environment-specific settings
 if _G.nvim_config.env.is_vscode then
-  -- VS Code specific settings
+  -- VS Code specific settings - PERFORMANCE OPTIMIZED
   opt.number = false
   opt.relativenumber = false
   opt.cursorline = false
   opt.signcolumn = "no"
   opt.colorcolumn = ""
+  opt.list = false -- Disable list chars in VS Code
+  opt.showmode = false -- VS Code shows mode
+  opt.ruler = false -- VS Code shows position
+  opt.showcmd = false -- VS Code shows commands
+  opt.laststatus = 0 -- Hide status line in VS Code
+  opt.cmdheight = 1 -- Minimal command height
+  opt.updatetime = 100 -- Faster updates for VS Code
+  opt.timeoutlen = 300 -- Faster key timeout
+  opt.ttimeoutlen = 10 -- Faster escape timeout
+  opt.redrawtime = 1500 -- Faster redraw timeout
+  opt.synmaxcol = 200 -- Limit syntax highlighting for long lines
+  opt.scrolljump = 5 -- Scroll 5 lines at a time
+  opt.sidescroll = 1 -- Smooth horizontal scrolling
+  opt.ttyfast = true -- Fast terminal connection
+  opt.lazyredraw = true -- Don't redraw during macros
 elseif _G.nvim_config.env.is_kiro then
   -- Kiro specific settings
   opt.signcolumn = "yes:1" -- Limit sign column width

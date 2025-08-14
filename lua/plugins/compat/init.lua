@@ -340,7 +340,8 @@ local fallback_configs = {
   
   -- Fallback for missing LSP
   lsp_fallback = function()
-    if not plugin_loader.features.lsp_available() then
+    if not plugin_loader.features.lsp_available() and not plugin_loader.env.is_vscode then
+      -- DISABLED: gd, gr fallbacks for VS Code to prevent conflicts
       vim.keymap.set("n", "gd", function()
         plugin_loader.fallbacks.lsp_fallback()
       end, { desc = "Go to definition (fallback)" })

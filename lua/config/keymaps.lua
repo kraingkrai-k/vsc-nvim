@@ -5,9 +5,11 @@ local utils = require("utils.init")
 -- Use the enhanced keymap utility
 local keymap = keymap_utils.set
 
--- Set up basic navigation and editing keymaps
-keymap_utils.setup_navigation_keymaps()
-keymap_utils.setup_editing_keymaps()
+-- Set up basic navigation and editing keymaps (only in standalone/Kiro)
+if not _G.nvim_config.env.is_vscode then
+  keymap_utils.setup_navigation_keymaps()
+  keymap_utils.setup_editing_keymaps()
+end
 
 -- Clear search highlighting
 keymap("n", "<Esc><Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlighting" })
@@ -20,7 +22,10 @@ keymap("v", "gm", "%", { desc = "Go to matching bracket" })
 
 -- Better line joining
 keymap("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
-keymap("n", "K", "kJ", { desc = "Join with line above" })
+-- DISABLED: K keymap to prevent VS Code conflicts - let VS Code handle hover natively
+if not _G.nvim_config.env.is_vscode then
+  keymap("n", "K", "kJ", { desc = "Join with line above" })
+end
 
 -- Better yanking
 keymap("n", "Y", "y$", { desc = "Yank to end of line" })
@@ -53,77 +58,30 @@ keymap("n", "<C-o>", "<C-o>", { desc = "Go to previous location" })
 keymap("n", "<C-i>", "<C-i>", { desc = "Go to next location" })
 keymap("n", "''", "''", { desc = "Go to previous position" })
 
--- ReplaceWithRegister plugin mappings (will be loaded conditionally)
-keymap("n", "<leader>rr", "<Plug>ReplaceWithRegisterLine", { desc = "Replace line with register" })
-keymap("n", "<leader>r", "<Plug>ReplaceWithRegisterOperator", { desc = "Replace with register operator" })
-keymap("v", "<leader>r", "<Plug>ReplaceWithRegisterVisual", { desc = "Replace selection with register" })
+-- ReplaceWithRegister plugin mappings (only in standalone/Kiro)
+if not _G.nvim_config.env.is_vscode then
+  keymap("n", "<leader>rr", "<Plug>ReplaceWithRegisterLine", { desc = "Replace line with register" })
+  keymap("n", "<leader>r", "<Plug>ReplaceWithRegisterOperator", { desc = "Replace with register operator" })
+  keymap("v", "<leader>r", "<Plug>ReplaceWithRegisterVisual", { desc = "Replace selection with register" })
+end
 
 -- Environment-specific keymaps
 if _G.nvim_config.env.is_vscode then
-  -- VS Code specific keymaps
+  -- VS Code specific keymaps - ULTRA MINIMAL to prevent hanging
   
-  -- Disable default behavior of 's' in VS Code
+  -- CRITICAL: Disable problematic keys that cause mode switching issues
   keymap("n", "s", "<Nop>", { desc = "Disabled in VS Code" })
-
-  -- File operations
-  keymap("n", "<leader>w", "<Cmd>call VSCodeNotify('workbench.action.files.save')<CR>", { desc = "Save file" })
-  keymap("n", "<leader>q", "<Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>", { desc = "Close editor" })
-  keymap("n", "<leader>n", "<Cmd>call VSCodeNotify('workbench.action.files.newUntitledFile')<CR>", { desc = "New file" })
+  keymap("n", "<C-j>", "<Nop>", { desc = "Disabled in VS Code" })
+  keymap("n", "<C-k>", "<Nop>", { desc = "Disabled in VS Code" })
   
-  -- Explorer
-  keymap("n", "<leader>es", "<Cmd>call VSCodeNotify('explorer.openToSide')<CR>", { desc = "Open file to side" })
-  keymap("n", "<leader>ef", "<Cmd>call VSCodeNotify('workbench.view.explorer')<CR><Cmd>call VSCodeNotify('list.find')<CR>", { desc = "Explorer filter" })
+  -- ONLY essential file operations - no complex VSCodeNotify calls
+  keymap("n", "<leader>w", "<Cmd>w<CR>", { desc = "Save file" })
+  keymap("n", "<leader>q", "<Cmd>q<CR>", { desc = "Quit" })
   
-  -- Commenting
-  keymap("n", "<leader>/", "<Cmd>call VSCodeNotify('editor.action.commentLine')<CR>", { desc = "Toggle comment" })
-  keymap("v", "<leader>/", "<Cmd>call VSCodeNotify('editor.action.commentLine')<CR>", { desc = "Toggle comment" })
-
-  -- Multi-cursor
-  keymap("n", "<leader>d", "<Cmd>call VSCodeNotify('editor.action.addSelectionToNextFindMatch')<CR>", { desc = "Add selection to next match" })
-  keymap("v", "<leader>d", "<Cmd>call VSCodeNotify('editor.action.addSelectionToNextFindMatch')<CR>", { desc = "Add selection to next match" })
-  keymap("v", "<leader>a", "<Cmd>call VSCodeNotify('editor.action.selectHighlights')<CR>", { desc = "Select all matches" })
+  -- Essential navigation handled by vscode.lua plugin config
   
-  -- Window management
-  keymap("n", "<leader>wv", "<Cmd>call VSCodeNotify('workbench.action.splitEditorRight')<CR>", { desc = "Split right" })
-  keymap("n", "<leader>wh", "<Cmd>call VSCodeNotify('workbench.action.splitEditorDown')<CR>", { desc = "Split down" })
-  keymap("n", "<leader>wn", "<Cmd>call VSCodeNotify('workbench.action.focusNextGroup')<CR>", { desc = "Focus next group" })
-  keymap("n", "<leader>wo", "<Cmd>call VSCodeNotify('workbench.action.closeEditorsInOtherGroups')<CR>", { desc = "Close other groups" })
-  keymap("n", "<leader>wc", "<Cmd>call VSCodeNotify('workbench.action.closeEditorsInGroup')<CR>", { desc = "Close group" })
-  keymap("n", "<leader>wm", "<Cmd>call VSCodeNotify('workbench.action.moveEditorToNextGroup')<CR>", { desc = "Move to next group" })
-  keymap("n", "<leader>wp", "<Cmd>call VSCodeNotify('workbench.action.moveEditorToPreviousGroup')<CR>", { desc = "Move to previous group" })
-
-  -- LSP & Code Navigation
-  keymap("n", "gd", "<Cmd>call VSCodeNotify('editor.action.revealDefinition')<CR>", { desc = "Go to definition" })
-  keymap("n", "gr", "<Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>", { desc = "Go to references" })
-  keymap("n", "K", "<Cmd>call VSCodeNotify('editor.action.showHover')<CR>", { desc = "Show hover" })
-  keymap("n", "<leader>rn", "<Cmd>call VSCodeNotify('editor.action.rename')<CR>", { desc = "Rename symbol" })
-  keymap("n", "<leader>ca", "<Cmd>call VSCodeNotify('editor.action.quickFix')<CR>", { desc = "Code actions" })
-  
-  -- Git Integration
-  keymap("n", "<leader>gd", "<Cmd>call VSCodeNotify('git.openChange')<CR>", { desc = "Git diff" })
-  keymap("n", "<leader>gb", "<Cmd>call VSCodeNotify('gitlens.toggleFileBlame')<CR>", { desc = "Git blame" })
-  keymap("n", "<leader>gs", "<Cmd>call VSCodeNotify('workbench.view.scm')<CR>", { desc = "Git status" })
-  
-  -- Buffer Management
-  keymap("n", "<leader>bd", "<Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>", { desc = "Close buffer" })
-  keymap("n", "<leader>ba", "<Cmd>call VSCodeNotify('workbench.action.closeAllEditors')<CR>", { desc = "Close all buffers" })
-  
-  -- Search & Replace
-  keymap("n", "<leader>ss", "<Cmd>call VSCodeNotify('workbench.action.findInFiles')<CR>", { desc = "Search in files" })
-  keymap("n", "<leader>sr", "<Cmd>call VSCodeNotify('workbench.action.replaceInFiles')<CR>", { desc = "Replace in files" })
-  
-  -- Diagnostics
-  keymap("n", "<leader>xx", "<Cmd>call VSCodeNotify('workbench.actions.view.problems')<CR>", { desc = "Show problems" })
-
-  -- Focus modes
-  keymap("n", "<leader>z", "<Cmd>call VSCodeNotify('workbench.action.toggleZenMode')<CR>", { desc = "Toggle Zen mode" })
-  keymap("n", "<leader>cl", "<Cmd>call VSCodeNotify('workbench.action.toggleCenteredLayout')<CR>", { desc = "Toggle centered layout" })
-
-  -- Project Manager
-  keymap("n", "<leader>pp", "<Cmd>call VSCodeNotify('projectManager.listProjects')<CR>", { desc = "List projects" })
-  keymap("n", "<leader>ps", "<Cmd>call VSCodeNotify('projectManager.saveProject')<CR>", { desc = "Save project" })
-  keymap("n", "<leader>pn", "<Cmd>call VSCodeNotify('projectManager.listProjectsNewWindow')<CR>", { desc = "Open project in new window" })
-  keymap("n", "<leader>pv", "<Cmd>call VSCodeNotify('workbench.view.extension.project-manager')<CR>", { desc = "Project manager view" })
+  -- DISABLE all other complex keymaps that might cause conflicts
+  -- Let VS Code handle everything else natively
 
 elseif _G.nvim_config.env.is_standalone then
   -- Standalone Neovim specific keymaps

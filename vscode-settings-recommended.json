@@ -1,0 +1,68 @@
+{
+  "vscode-neovim.neovimClean": true,
+  "vscode-neovim.useWSL": false,
+  "vscode-neovim.logLevel": "error",
+  "vscode-neovim.neovimPath": "/opt/homebrew/bin/nvim",
+  "vscode-neovim.neovimInitVimPaths.darwin": "$HOME/.config/nvim/init.lua",
+  "vscode-neovim.revealCursorScrollLine": false,
+  
+  "editor.cursorSmoothCaretAnimation": "off",
+  "editor.smoothScrolling": false,
+  "editor.fastScrollSensitivity": 5,
+  "editor.mouseWheelScrollSensitivity": 1,
+  "editor.lineNumbers": "relative",
+  "editor.cursorBlinking": "solid",
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "breadcrumbs.enabled": false,
+  
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.acceptSuggestionOnEnter": "off",
+  "editor.tabCompletion": "off",
+  "editor.multiCursorModifier": "ctrlCmd",
+  
+  "keyboard.dispatch": "keyCode",
+  
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  
+  "workbench.colorCustomizations": {
+    "editorCursor.foreground": "#E5C07B",
+    "terminalCursor.foreground": "#1bb66e"
+  },
+  
+  "editor.fontFamily": "JetBrainsMono Nerd Font, monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.4,
+  
+  "files.autoSave": "off",
+  "files.autoSaveDelay": 10000,
+  
+  "workbench.list.automaticKeyboardNavigation": false,
+  "workbench.quickOpen.closeOnFocusOut": false,
+  "search.useGlobalIgnoreFiles": true,
+  "search.useIgnoreFiles": true,
+  
+  "terminal.integrated.commandsToSkipShell": [
+    "language-julia.interrupt"
+  ],
+  "terminal.integrated.sendKeybindingsToShell": false,
+  
+  "git.decorations.enabled": false,
+  "git.enableSmartCommit": false,
+  "scm.diffDecorations": "none",
+  "problems.decorations.enabled": false,
+  
+  "vscode-neovim.compositeKeys": {
+    "jk": {
+      "command": "vscode-neovim.escape"
+    }
+  }
+}

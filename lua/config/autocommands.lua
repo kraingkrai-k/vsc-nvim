@@ -6,28 +6,41 @@ local function augroup(name)
   return vim.api.nvim_create_augroup("nvim_config_" .. name, { clear = true })
 end
 
--- Highlight on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-  group = augroup("highlight_yank"),
-  callback = function()
-    vim.highlight.on_yank({
-      higroup = "IncSearch",
-      timeout = 200,
-    })
-  end,
-  desc = "Highlight yanked text",
-})
+-- Skip heavy autocommands in VS Code to improve performance
+if not _G.nvim_config.env.is_vscode then
+  -- Highlight on yank (only in standalone/Kiro)
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    group = augroup("highlight_yank"),
+    callback = function()
+      vim.highlight.on_yank({
+        higroup = "IncSearch",
+        timeout = 200,
+      })
+    end,
+    desc = "Highlight yanked text",
+  })
 
--- Auto-resize splits when Vim is resized
-vim.api.nvim_create_autocmd("VimResized", {
-  group = augroup("resize_splits"),
-  callback = function()
-    local current_tab = vim.fn.tabpagenr()
-    vim.cmd("tabdo wincmd =")
-    vim.cmd("tabnext " .. current_tab)
-  end,
-  desc = "Resize splits when Vim is resized",
-})
+  -- Auto-resize splits when Vim is resized (only in standalone/Kiro)
+  vim.api.nvim_create_autocmd("VimResized", {
+    group = augroup("resize_splits"),
+    callback = function()
+      local current_tab = vim.fn.tabpagenr()
+      vim.cmd("tabdo wincmd =")
+      vim.cmd("tabnext " .. current_tab)
+    end,
+    desc = "Resize splits when Vim is resized",
+  })
+else
+  -- VS Code specific - minimal autocommands for performance
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    group = augroup("highlight_yank_vscode"),
+    callback = function()
+      -- Minimal highlight for VS Code
+      vim.highlight.on_yank({ timeout = 100 })
+    end,
+    desc = "Minimal highlight yanked text in VS Code",
+  })
+end
 
 -- Close certain filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
@@ -247,12 +260,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- Buffer local mappings for LSP
     local keymap_utils = require("utils.keymaps")
     
-    keymap_utils.set_buffer_local(event.buf, "n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-    keymap_utils.set_buffer_local(event.buf, "n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
+    -- DISABLED: gd, gr, K to prevent VS Code conflicts - let VS Code handle them natively
+    if not _G.nvim_config.env.is_vscode then
+      keymap_utils.set_buffer_local(event.buf, "n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+      keymap_utils.set_buffer_local(event.buf, "n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
+      keymap_utils.set_buffer_local(event.buf, "n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
+    end
     keymap_utils.set_buffer_local(event.buf, "n", "gI", vim.lsp.buf.implementation, { desc = "Go to implementation" })
     keymap_utils.set_buffer_local(event.buf, "n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
     keymap_utils.set_buffer_local(event.buf, "n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
-    keymap_utils.set_buffer_local(event.buf, "n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
     keymap_utils.set_buffer_local(event.buf, "n", "gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
     keymap_utils.set_buffer_local(event.buf, "n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
     keymap_utils.set_buffer_local(event.buf, { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })

@@ -89,6 +89,9 @@ M.features = {
   
   -- Check if specific command is available
   command_available = function(cmd)
+    if type(cmd) ~= "string" then
+      return false
+    end
     return vim.fn.executable(cmd) == 1
   end,
 }
@@ -297,7 +300,7 @@ M.health_check = function()
   -- Check for missing dependencies
   local deps = { "git", "rg", "fd", "node", "python3" }
   for _, dep in ipairs(deps) do
-    if not M.features.command_available(dep) then
+    if type(dep) == "string" and not M.features.command_available(dep) then
       table.insert(health.missing_dependencies, dep)
     end
   end
