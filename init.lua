@@ -1,63 +1,92 @@
+-- Ultra Simple Neovim Config - VS Code Focused
+-- Only essential features for productivity
 
--- Modern Neovim configuration entry point
--- Bootstrap the new configuration system
+-- Set leader key early
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
--- CRITICAL: Early VS Code detection and minimal loading
-if vim.g.vscode then
-  -- ULTRA MINIMAL VS Code configuration to prevent hanging
-  vim.g.mapleader = " "
-  vim.g.maplocalleader = " "
-  
-  -- CRITICAL: Disable all providers immediately
-  vim.g.loaded_python3_provider = 0
-  vim.g.loaded_ruby_provider = 0
-  vim.g.loaded_perl_provider = 0
-  vim.g.loaded_node_provider = 0
-  vim.g.loaded_clipboard_provider = 0
-  
-  -- CRITICAL: Minimal settings only
-  vim.opt.timeoutlen = 1000
-  vim.opt.ttimeoutlen = 50
-  vim.opt.updatetime = 300
-  vim.opt.lazyredraw = true
-  
-  -- CRITICAL: Initialize minimal global config for VS Code
-  _G.nvim_config = {
-    env = {
-      is_vscode = true,
-      is_kiro = false,
-      is_standalone = false,
-    }
-  }
-  
-  -- CRITICAL: Only essential keymaps
-  vim.keymap.set("n", "<leader>w", "<Cmd>w<CR>", { desc = "Save" })
-  vim.keymap.set("n", "<leader>q", "<Cmd>q<CR>", { desc = "Quit" })
-  
-  -- Skip all other configuration for VS Code
-  return
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none", 
+    "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
--- Performance optimization: Start timing for non-VS Code
-local start_time = vim.loop.hrtime()
+-- Basic options
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.clipboard = "unnamedplus"
 
--- Load the main configuration (only for standalone/Kiro)
-require("config")
-
--- Performance monitoring
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    local end_time = vim.loop.hrtime()
-    local startup_time = (end_time - start_time) / 1e6 -- Convert to milliseconds
+-- VS Code specific config
+if vim.g.vscode then
+  -- Only essential plugins for VS Code
+  require("lazy").setup({
+    -- Surround text objects
+    { 
+      "tpope/vim-surround",
+      event = "VeryLazy",
+    },
     
-    -- Welcome message based on environment
-    if _G.nvim_config.env.is_kiro then
-      vim.notify("Modern Neovim config loaded for Kiro! ⚡", vim.log.levels.INFO)
-    else
-      vim.notify(
-        string.format("Modern Neovim config loaded in %.2fms! 🎯", startup_time),
-        vim.log.levels.INFO
-      )
-    end
-  end,
-})
+    -- Comment toggling
+    {
+      "numToStr/Comment.nvim",
+      keys = {
+        { "gcc", mode = "n", desc = "Comment toggle current line" },
+        { "gc", mode = { "n", "o" }, desc = "Comment toggle linewise" },
+        { "gc", mode = "x", desc = "Comment toggle linewise (visual)" },
+      },
+      config = function()
+        require("Comment").setup()
+      end,
+    },
+    
+    -- Auto pairs
+    {
+      "windwp/nvim-autopairs",
+      event = "InsertEnter",
+      config = function()
+        require("nvim-autopairs").setup()
+      end,
+    },
+    
+    -- Repeat for surround
+    { "tpope/vim-repeat", event = "VeryLazy" },
+  })
+  
+  -- VS Code keymaps - minimal
+  vim.keymap.set("n", "<leader>w", "<Cmd>w<CR>", { desc = "Save file" })
+  vim.keymap.set("n", "<leader>q", "<Cmd>q<CR>", { desc = "Quit" })
+  vim.keymap.set("n", "gm", "%", { desc = "Go to matching bracket" })
+  vim.keymap.set("v", "gm", "%", { desc = "Go to matching bracket" })
+  vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
+  vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without overwriting register" })
+  vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+  vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+  
+  -- Disable conflicting keys
+  vim.keymap.set("n", "s", "<nop>", { desc = "Disabled for surround" })
+  vim.keymap.set("v", "s", "<nop>", { desc = "Disabled for surround" })
+  vim.keymap.set("n", "c", "<nop>", { desc = "Disabled for surround - use cl or cc" })
+  
+  -- Alternative change commands
+  vim.keymap.set("n", "<leader>c", "c", { desc = "Change (alternative)" })
+  
+else
+  -- Full config for standalone Neovim (placeholder)
+  require("lazy").setup({
+    -- Placeholder for future standalone features
+  })
+  
+  -- Standalone keymaps
+  vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Save file" })
+  vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+  vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
+  vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
+  vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
+  vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
+end
