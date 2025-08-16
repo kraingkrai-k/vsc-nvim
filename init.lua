@@ -113,6 +113,15 @@ if vim.g.vscode then
   vim.keymap.set("n", "<leader>h", "<cmd>lua require('vscode').action('workbench.action.focusLeftGroup')<cr>", { desc = "Focus left editor group" })
   vim.keymap.set("n", "<leader>l", "<cmd>lua require('vscode').action('workbench.action.focusRightGroup')<cr>", { desc = "Focus right editor group" })
   
+  -- Git operations
+  vim.keymap.set("n", "<leader>g", "<cmd>lua require('vscode').action('workbench.view.scm')<cr>", { desc = "Show Git panel" })
+  vim.keymap.set("n", "<leader>gd", "<cmd>lua require('vscode').action('git.openChange')<cr>", { desc = "Show file diff" })
+  vim.keymap.set("n", "<leader>gb", "<cmd>lua require('vscode').action('gitlens.toggleFileBlame')<cr>", { desc = "Toggle Git blame" })
+  vim.keymap.set("n", "<leader>gs", "<cmd>lua require('vscode').action('git.stage')<cr>", { desc = "Stage current file" })
+  
+  -- Zen Mode
+  vim.keymap.set("n", "<leader>z", "<cmd>lua require('vscode').action('workbench.action.toggleZenMode')<cr>", { desc = "Toggle Zen Mode" })
+  
 else
   -- Full config for standalone Neovim (placeholder)
   require("lazy").setup({

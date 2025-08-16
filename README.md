@@ -45,19 +45,6 @@ nvim
 
 1. Install the [VSCode Neovim extension](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim)
 
-2. Add to your VS Code `settings.json`:
-
-```json
-{
-  "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
-  },
-  "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
-  "vscode-neovim.neovimInitVimPaths.darwin": "$HOME/.config/nvim/init.lua",
-  "keyboard.dispatch": "keyCode"
-}
-```
-
 ### Standalone Neovim
 
 Works out of the box with basic configuration. More features can be added as needed.
@@ -198,6 +185,21 @@ ds'                  // hello world (ลบ ' ออก)
 | `<leader>v` | Split editor vertical | แบ่งหน้าจอแนวตั้ง |
 | `<leader>h` | Focus left editor     | โฟกัสไปหน้าจอซ้าย |
 | `<leader>l` | Focus right editor    | โฟกัสไปหน้าจอขวา  |
+
+### 🗂️ Git Operations
+
+| Key         | Action             | Description                |
+| ----------- | ------------------ | -------------------------- |
+| `<leader>g` | Show Git panel     | เปิด Git panel (Source Control) |
+| `<leader>gd`| Show file diff     | ดู changes ของไฟล์ปัจจุบัน |
+| `<leader>gb`| Toggle Git blame   | เปิด/ปิด Git blame (GitLens) |
+| `<leader>gs`| Stage current file | Stage ไฟล์ปัจจุบัน        |
+
+### 🧘 Zen Mode
+
+| Key         | Action           | Description     |
+| ----------- | ---------------- | --------------- |
+| `<leader>z` | Toggle Zen Mode  | เปิด/ปิด Zen Mode |
 
 ### 🖥️ Standalone Neovim (Window Management)
 

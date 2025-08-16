@@ -1,5 +1,5 @@
 {
-  "vscode-neovim.neovimClean": true,
+  "vscode-neovim.neovimClean": false,
   "vscode-neovim.useWSL": false,
   "vscode-neovim.logLevel": "error",
   "vscode-neovim.neovimPath": "/opt/homebrew/bin/nvim",
