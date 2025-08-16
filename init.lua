@@ -15,12 +15,14 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Basic options
+-- Basic options - optimized for VS Code + plugins
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false  -- ไม่จำเป็นแล้วเพราะมี flash.nvim
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.clipboard = "unnamedplus"
+vim.opt.cursorline = true       -- highlight บรรทัดปัจจุบัน (ดีกว่า relative number)
+vim.opt.scrolloff = 8           -- เห็นบริบทรอบ ๆ cursor
 
 -- VS Code specific config
 if vim.g.vscode then
