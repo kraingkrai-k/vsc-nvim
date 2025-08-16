@@ -56,6 +56,23 @@ if vim.g.vscode then
     
     -- Repeat for surround
     { "tpope/vim-repeat", event = "VeryLazy" },
+    
+    -- Flash - super fast navigation
+    {
+      "folke/flash.nvim",
+      keys = {
+        { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash Jump" },
+        -- ปิด S ไว้ก่อน เพราะอาจงงกับการใช้งาน
+        -- { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      },
+      config = function()
+        require("flash").setup({
+          modes = {
+            char = { enabled = false }, -- ปิด f/F/t/T enhancement เพื่อไม่ conflict
+          },
+        })
+      end,
+    },
   })
   
   -- VS Code keymaps - minimal
@@ -68,13 +85,16 @@ if vim.g.vscode then
   vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
   vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
   
-  -- Disable conflicting keys
-  vim.keymap.set("n", "s", "<nop>", { desc = "Disabled for surround" })
-  vim.keymap.set("v", "s", "<nop>", { desc = "Disabled for surround" })
-  vim.keymap.set("n", "c", "<nop>", { desc = "Disabled for surround - use cl or cc" })
+  -- Note: 's' key now used by flash.nvim for navigation
   
-  -- Alternative change commands
-  vim.keymap.set("n", "<leader>c", "c", { desc = "Change (alternative)" })
+  -- Alternative commands for what 's' used to do
+  vim.keymap.set("n", "<leader>s", "cl", { desc = "Substitute character (was 's')" })
+  -- S key คืนให้ vim ใช้เป็น substitute line (เดิม)
+  
+  -- VS Code editor split and navigation
+  vim.keymap.set("n", "<leader>v", "<cmd>lua require('vscode').action('workbench.action.splitEditor')<cr>", { desc = "Split editor vertically" })
+  vim.keymap.set("n", "<leader>h", "<cmd>lua require('vscode').action('workbench.action.focusLeftGroup')<cr>", { desc = "Focus left editor group" })
+  vim.keymap.set("n", "<leader>l", "<cmd>lua require('vscode').action('workbench.action.focusRightGroup')<cr>", { desc = "Focus right editor group" })
   
 else
   -- Full config for standalone Neovim (placeholder)

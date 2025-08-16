@@ -16,14 +16,18 @@
   "editor.detectIndentation": false,
   "breadcrumbs.enabled": false,
   
-  "editor.quickSuggestions": {
-    "other": false,
+    "editor.quickSuggestions": {
+    "other": true,
     "comments": false,
-    "strings": false
+    "strings": true
   },
-  "editor.suggestOnTriggerCharacters": false,
-  "editor.acceptSuggestionOnEnter": "off",
-  "editor.tabCompletion": "off",
+
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.tabCompletion": "on",
+  "editor.quickSuggestionsDelay": 10,
+  "editor.wordBasedSuggestions": "matchingDocuments",
+  
   "editor.multiCursorModifier": "ctrlCmd",
   
   "keyboard.dispatch": "keyCode",
