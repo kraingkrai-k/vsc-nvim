@@ -65,88 +65,101 @@ Works out of the box with basic configuration. More features can be added as nee
 ## 📋 Cheat Sheet & Plugin Guide
 
 ### 🎯 Leader Key
+
 - `<Space>` - Leader key สำหรับ commands หลัก
 
 ### 📁 File Operations
+
 | Key         | Action     | Description           |
 | ----------- | ---------- | --------------------- |
 | `<leader>w` | Save file  | บันทึกไฟล์            |
 | `<leader>q` | Close/Quit | ปิดไฟล์หรือออกจาก vim |
 
 ### 🚀 Flash.nvim - Super Fast Navigation
+
 > เปลี่ยนวิธีการ navigate ใหม่หมด! ไม่ต้องนับบรรทัดหรือกด j/k หลายครั้ง
 
-| Key | Action      | Description                                    |
-| --- | ----------- | ---------------------------------------------- |
-| `s` | Flash Jump  | กระโดดไปที่ข้อความใดก็ได้บนหน้าจอด้วย 2 ตัวอักษร |
+| Key | Action     | Description                                      |
+| --- | ---------- | ------------------------------------------------ |
+| `s` | Flash Jump | กระโดดไปที่ข้อความใดก็ได้บนหน้าจอด้วย 2 ตัวอักษร |
 
 **วิธีใช้ Flash:**
-1. กด `s` 
+
+1. กด `s`
 2. พิมพ์ 2 ตัวอักษรแรกของคำที่ต้องการไป
 3. กระโดดไปทันที!
 
 **ตัวอย่าง:**
+
 ```javascript
-const fetchUserData = () => {    // s + "fe" → ไปที่ fetch
-  if (userProfile) {             // s + "if" → ไปที่ if  
-    return userData;             // s + "re" → ไปที่ return
+const fetchUserData = () => {
+  // s + "fe" → ไปที่ fetch
+  if (userProfile) {
+    // s + "if" → ไปที่ if
+    return userData; // s + "re" → ไปที่ return
   }
-}
+};
 ```
 
 ### 🕷️ Spider.nvim - Smart Word Movement
+
 > การเคลื่อนย้ายคำแบบ smart สำหรับ camelCase และ snake_case
 
-| Key | Action           | Description                               |
-| --- | ---------------- | ----------------------------------------- |
-| `w` | Next word        | ไปคำถัดไปแบบ smart (หยุดที่ camelCase)    |
-| `e` | End of word      | ไปจบคำแบบ smart                          |
-| `b` | Previous word    | ไปคำก่อนหน้าแบบ smart                     |
+| Key | Action        | Description                            |
+| --- | ------------- | -------------------------------------- |
+| `w` | Next word     | ไปคำถัดไปแบบ smart (หยุดที่ camelCase) |
+| `e` | End of word   | ไปจบคำแบบ smart                        |
+| `b` | Previous word | ไปคำก่อนหน้าแบบ smart                  |
 
 **ตัวอย่างการใช้งาน:**
+
 ```javascript
 // ปกติ: w จะข้ามไปจบคำเลย
 // Spider: w จะหยุดที่แต่ละส่วนของ camelCase
-const getUserProfileData = () => {}
+const getUserProfileData = () => {};
 //    ↑    ↑       ↑    ↑      cursor stops ที่แต่ละตำแหน่ง
 
 // ใช้กับ commands อื่น:
-dw  // Delete word (smart)
-cw  // Change word (smart)  
-vw  // Visual select word (smart)
+dw; // Delete word (smart)
+cw; // Change word (smart)
+vw; // Visual select word (smart)
 ```
 
 ### 🔄 Comment.nvim - Comment Toggle
-| Key | Mode   | Action              | Description                    |
-| --- | ------ | ------------------- | ------------------------------ |
-| `gcc` | Normal | Toggle line comment | Comment/uncomment บรรทัดปัจจุบัน |
-| `gc`  | Visual | Toggle block comment | Comment/uncomment หลายบรรทัด    |
+
+| Key   | Mode   | Action               | Description                      |
+| ----- | ------ | -------------------- | -------------------------------- |
+| `gcc` | Normal | Toggle line comment  | Comment/uncomment บรรทัดปัจจุบัน |
+| `gc`  | Visual | Toggle block comment | Comment/uncomment หลายบรรทัด     |
 
 **ตัวอย่าง:**
+
 ```javascript
-console.log("Hello");     // กด gcc
+console.log("Hello"); // กด gcc
 // console.log("Hello");  // กลายเป็น comment
 
 // เลือกหลายบรรทัดด้วย Visual mode แล้วกด gc
 ```
 
 ### 🎯 vim-surround - Text Object Manipulation
+
 > จัดการ quotes, brackets, tags ได้อย่างรวดเร็ว
 
-| Command       | Action            | Description                     |
-| ------------- | ----------------- | ------------------------------- |
-| `ys{motion}{char}` | Add surround  | ครอบข้อความด้วยตัวอักษร          |
-| `cs{old}{new}` | Change surround  | เปลี่ยนตัวครอบ                  |
-| `ds{char}`    | Delete surround  | ลบตัวครอบออก                    |
+| Command            | Action          | Description             |
+| ------------------ | --------------- | ----------------------- |
+| `ys{motion}{char}` | Add surround    | ครอบข้อความด้วยตัวอักษร |
+| `cs{old}{new}`     | Change surround | เปลี่ยนตัวครอบ          |
+| `ds{char}`         | Delete surround | ลบตัวครอบออก            |
 
 **ตัวอย่างการใช้งาน:**
+
 ```javascript
 // Add surround
 hello world          // cursor บน hello
 ysw"                 // "hello" world (surround word with ")
 yss)                 // (hello world) (surround line with ())
 
-// Change surround  
+// Change surround
 "hello world"        // cursor ที่ไหนก็ได้ในบรรทัด
 cs"'                 // 'hello world' (เปลี่ยนจาก " เป็น ')
 cs'<em>              // <em>hello world</em> (เปลี่ยนเป็น tag)
@@ -157,53 +170,59 @@ ds'                  // hello world (ลบ ' ออก)
 ```
 
 ### 🔗 nvim-autopairs - Auto Complete Pairs
+
 > เติม brackets, quotes อัตโนมัติ
 
-| Input | Result | Description              |
-| ----- | ------ | ------------------------ |
-| `(`   | `()`   | เติม closing bracket      |
+| Input | Result | Description                 |
+| ----- | ------ | --------------------------- |
+| `(`   | `()`   | เติม closing bracket        |
 | `[`   | `[]`   | เติม closing square bracket |
-| `{`   | `{}`   | เติม closing curly bracket |
-| `"`   | `""`   | เติม closing quote        |
-| `'`   | `''`   | เติม closing single quote |
+| `{`   | `{}`   | เติม closing curly bracket  |
+| `"`   | `""`   | เติม closing quote          |
+| `'`   | `''`   | เติม closing single quote   |
 
 ### 🔧 Enhanced Editing (Built-in Improvements)
-| Key           | Action                    | Description                      |
-| ------------- | ------------------------- | -------------------------------- |
-| `gm`          | Go to matching bracket    | ไปที่ bracket คู่                 |
-| `Y`           | Yank to end of line       | copy จาก cursor ถึงจบบรรทัด        |
-| `<leader>p`   | Paste (no overwrite)      | paste โดยไม่เขียนทับ register     |
-| `<leader>s`   | Substitute character      | แทนที่ตัวอักษร (ทดแทน `s` เดิม)   |
-| `<` / `>`     | Indent (stays selected)   | เยื้องและคงการเลือกไว้             |
+
+| Key         | Action                  | Description                     |
+| ----------- | ----------------------- | ------------------------------- |
+| `gm`        | Go to matching bracket  | ไปที่ bracket คู่               |
+| `Y`         | Yank to end of line     | copy จาก cursor ถึงจบบรรทัด     |
+| `<leader>p` | Paste (no overwrite)    | paste โดยไม่เขียนทับ register   |
+| `<leader>s` | Substitute character    | แทนที่ตัวอักษร (ทดแทน `s` เดิม) |
+| `<` / `>`   | Indent (stays selected) | เยื้องและคงการเลือกไว้          |
 
 ### 💻 VS Code Integration
-| Key         | Action                 | Description              |
-| ----------- | ---------------------- | ------------------------ |
-| `<leader>v` | Split editor vertical  | แบ่งหน้าจอแนวตั้ง         |
-| `<leader>h` | Focus left editor      | โฟกัสไปหน้าจอซ้าย        |
-| `<leader>l` | Focus right editor     | โฟกัสไปหน้าจอขวา         |
+
+| Key         | Action                | Description       |
+| ----------- | --------------------- | ----------------- |
+| `<leader>v` | Split editor vertical | แบ่งหน้าจอแนวตั้ง |
+| `<leader>h` | Focus left editor     | โฟกัสไปหน้าจอซ้าย |
+| `<leader>l` | Focus right editor    | โฟกัสไปหน้าจอขวา  |
 
 ### 🖥️ Standalone Neovim (Window Management)
-| Key              | Action           | Description               |
-| ---------------- | ---------------- | ------------------------- |
-| `<C-h/j/k/l>`    | Navigate windows | เปลี่ยนไปมาระหว่าง split   |
+
+| Key           | Action           | Description              |
+| ------------- | ---------------- | ------------------------ |
+| `<C-h/j/k/l>` | Navigate windows | เปลี่ยนไปมาระหว่าง split |
 
 ### ⌨️ Built-in Vim (ยังใช้ได้ปกติ)
-| Key       | Action                | Description                  |
-| --------- | --------------------- | ---------------------------- |
-| `f{char}` | Find character forward | หาตัวอักษรไปข้างหน้า         |
-| `F{char}` | Find character backward | หาตัวอักษรไปข้างหลัง        |
-| `*` / `#` | Search word           | ค้นหาคำใต้ cursor             |
-| `n` / `N` | Next/prev search      | ค้นหาต่อ/กลับ                |
-| `gd`      | Go to definition      | ไปที่ definition (VS Code)   |
-| `gr`      | Go to references      | ไปที่ references (VS Code)   |
-| `K`       | Show hover            | แสดงข้อมูล hover (VS Code)   |
+
+| Key       | Action                  | Description                |
+| --------- | ----------------------- | -------------------------- |
+| `f{char}` | Find character forward  | หาตัวอักษรไปข้างหน้า       |
+| `F{char}` | Find character backward | หาตัวอักษรไปข้างหลัง       |
+| `*` / `#` | Search word             | ค้นหาคำใต้ cursor          |
+| `n` / `N` | Next/prev search        | ค้นหาต่อ/กลับ              |
+| `gd`      | Go to definition        | ไปที่ definition (VS Code) |
+| `gr`      | Go to references        | ไปที่ references (VS Code) |
+| `K`       | Show hover              | แสดงข้อมูล hover (VS Code) |
 
 ## 🔧 Configuration Details
 
 ### 🎯 Plugins Overview (VS Code Environment)
 
 **Only 5 Essential Plugins:**
+
 1. **Flash.nvim** - Super fast navigation with 2-character jump
 2. **Spider.nvim** - Smart word movement for camelCase
 3. **Comment.nvim** - Toggle comments with gcc/gc
@@ -222,7 +241,7 @@ ds'                  // hello world (ลบ ' ออก)
 ```lua
 if vim.g.vscode then
   -- VS Code specific plugins and keymaps
-else  
+else
   -- Standalone Neovim (basic setup)
 end
 ```
@@ -274,6 +293,7 @@ rm -rf ~/.cache/nvim/
 ### Plugin Issues
 
 Check plugin status and health:
+
 ```vim
 :Lazy        " Plugin manager
 :checkhealth " Health diagnostics
@@ -282,6 +302,7 @@ Check plugin status and health:
 ## 📚 Quick Reference
 
 ### Useful Commands
+
 ```vim
 :Lazy        " Plugin manager
 :Lazy sync   " Update all plugins
@@ -289,12 +310,7 @@ Check plugin status and health:
 ```
 
 ### Links
+
 - [Neovim Documentation](https://neovim.io/doc/)
-- [Lazy.nvim Plugin Manager](https://github.com/folke/lazy.nvim)  
+- [Lazy.nvim Plugin Manager](https://github.com/folke/lazy.nvim)
 - [VS Code Neovim Extension](https://github.com/vscode-neovim/vscode-neovim)
-
----
-
-**🎯 สรุป:** Configuration นี้เน้นความเร็วและ productivity สำหรับการใช้งานใน VS Code เป็นหลัก ด้วย plugins เพียง 5 ตัวที่คัดเลือกมาอย่างดี
-
-> **Flash (s) + Spider (w/e/b) = การ navigate ที่เร็วที่สุด!** 🚀
