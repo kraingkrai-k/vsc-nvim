@@ -1,15 +1,16 @@
-# 🚀 Modern Neovim Configuration
+# 🚀 Ultra Simple Neovim Configuration
 
-A powerful, environment-aware Neovim configuration that works seamlessly across **Standalone Neovim**, **VS Code**, and **Kiro IDE**. Built with performance, productivity, and modern development workflows in mind.
+> การกำหนดค่า Neovim แบบ minimal ที่เน้น VS Code เป็นหลัก เพื่อประสิทธิภาพและความเสถียร
+
+A minimal, performance-focused Neovim configuration designed primarily for **VS Code** integration with essential plugins for enhanced productivity.
 
 ## ✨ Features
 
-- 🎯 **Environment-Aware**: Automatically adapts to VS Code, Kiro, or standalone Neovim
-- ⚡ **Performance Optimized**: Fast startup with lazy loading and environment-specific optimizations
-- 🔧 **Modern Tooling**: LSP, Treesitter, Telescope, and more
-- 🎨 **Beautiful UI**: Catppuccin theme with consistent styling across environments
-- 🔄 **Smart Fallbacks**: Graceful degradation when features aren't available
-- 📱 **Cross-Platform**: Works on macOS, Linux, and Windows
+- 🎯 **VS Code First**: Optimized primarily for VS Code Neovim extension
+- ⚡ **Ultra Fast**: Single file configuration with minimal plugins
+- 🔧 **Essential Tools**: Only 5 carefully selected plugins for maximum productivity
+- 🚀 **Instant Startup**: No delays or lag
+- 📱 **Standalone Ready**: Basic fallback for standalone Neovim
 
 ## 🚀 Quick Start
 
@@ -40,9 +41,7 @@ git clone https://github.com/kraingkrai-k/vsc-nvim.git ~/.config/nvim
 nvim
 ```
 
-### Environment Setup
-
-#### For VS Code Users
+### VS Code Setup (Primary Use Case)
 
 1. Install the [VSCode Neovim extension](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim)
 
@@ -55,182 +54,204 @@ nvim
   },
   "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
   "vscode-neovim.neovimInitVimPaths.darwin": "$HOME/.config/nvim/init.lua",
-  "editor.cursorSmoothCaretAnimation": "on",
   "keyboard.dispatch": "keyCode"
 }
 ```
 
-#### For Kiro IDE Users
+### Standalone Neovim
 
-The configuration automatically detects Kiro and loads enhanced features for AI-powered development workflows.
+Works out of the box with basic configuration. More features can be added as needed.
 
-#### For Standalone Neovim
+## 📋 Cheat Sheet & Plugin Guide
 
-No additional setup required! The full feature set is available out of the box.
+### 🎯 Leader Key
+- `<Space>` - Leader key สำหรับ commands หลัก
 
-## 📋 Cheat Sheet
+### 📁 File Operations
+| Key         | Action     | Description           |
+| ----------- | ---------- | --------------------- |
+| `<leader>w` | Save file  | บันทึกไฟล์            |
+| `<leader>q` | Close/Quit | ปิดไฟล์หรือออกจาก vim |
 
-### Universal Keybindings (All Environments)
+### 🚀 Flash.nvim - Super Fast Navigation
+> เปลี่ยนวิธีการ navigate ใหม่หมด! ไม่ต้องนับบรรทัดหรือกด j/k หลายครั้ง
 
-| Key          | Action            | Description                      |
-| ------------ | ----------------- | -------------------------------- |
-| `<Space>`    | Leader key        | Primary leader for most commands |
-| `<Esc><Esc>` | Clear search      | Clear search highlighting        |
-| `H`          | Beginning of line | Go to start of line              |
-| `L`          | End of line       | Go to end of line                |
-| `U`          | Redo              | Redo last undone change          |
-| `Y`          | Yank to end       | Yank from cursor to end of line  |
+| Key | Action      | Description                                    |
+| --- | ----------- | ---------------------------------------------- |
+| `s` | Flash Jump  | กระโดดไปที่ข้อความใดก็ได้บนหน้าจอด้วย 2 ตัวอักษร |
 
-### Navigation & Movement
+**วิธีใช้ Flash:**
+1. กด `s` 
+2. พิมพ์ 2 ตัวอักษรแรกของคำที่ต้องการไป
+3. กระโดดไปทันที!
 
-| Key     | Action           | Description                    |
-| ------- | ---------------- | ------------------------------ |
-| `s`     | Flash jump       | Quick jump to any visible text |
-| `S`     | Flash treesitter | Jump to code structures        |
-| `gm`    | Matching bracket | Go to matching bracket         |
-| `<C-j>` | Fast scroll down | Scroll 5 lines down            |
-| `<C-k>` | Fast scroll up   | Scroll 5 lines up              |
+**ตัวอย่าง:**
+```javascript
+const fetchUserData = () => {    // s + "fe" → ไปที่ fetch
+  if (userProfile) {             // s + "if" → ไปที่ if  
+    return userData;             // s + "re" → ไปที่ return
+  }
+}
+```
 
-### File Operations
+### 🕷️ Spider.nvim - Smart Word Movement
+> การเคลื่อนย้ายคำแบบ smart สำหรับ camelCase และ snake_case
 
-| Key          | Action        | Environment                  |
-| ------------ | ------------- | ---------------------------- |
-| `<leader>w`  | Save file     | All                          |
-| `<leader>q`  | Close/Quit    | All                          |
-| `<leader>ff` | Find files    | All (Telescope/VS Code/Kiro) |
-| `<leader>fg` | Find in files | All (Live grep/Search)       |
+| Key | Action           | Description                               |
+| --- | ---------------- | ----------------------------------------- |
+| `w` | Next word        | ไปคำถัดไปแบบ smart (หยุดที่ camelCase)    |
+| `e` | End of word      | ไปจบคำแบบ smart                          |
+| `b` | Previous word    | ไปคำก่อนหน้าแบบ smart                     |
 
-### Code Navigation & LSP
+**ตัวอย่างการใช้งาน:**
+```javascript
+// ปกติ: w จะข้ามไปจบคำเลย
+// Spider: w จะหยุดที่แต่ละส่วนของ camelCase
+const getUserProfileData = () => {}
+//    ↑    ↑       ↑    ↑      cursor stops ที่แต่ละตำแหน่ง
 
-| Key          | Action                   | Environment |
-| ------------ | ------------------------ | ----------- |
-| `gd`         | Go to definition         | All         |
-| `gr`         | Go to references         | All         |
-| `K`          | Show hover/documentation | All         |
-| `<leader>ca` | Code actions             | All         |
-| `<leader>rn` | Rename symbol            | All         |
-| `[d` / `]d`  | Previous/Next diagnostic | Standalone  |
+// ใช้กับ commands อื่น:
+dw  // Delete word (smart)
+cw  // Change word (smart)  
+vw  // Visual select word (smart)
+```
 
-### VS Code Specific
+### 🔄 Comment.nvim - Comment Toggle
+| Key | Mode   | Action              | Description                    |
+| --- | ------ | ------------------- | ------------------------------ |
+| `gcc` | Normal | Toggle line comment | Comment/uncomment บรรทัดปัจจุบัน |
+| `gc`  | Visual | Toggle block comment | Comment/uncomment หลายบรรทัด    |
 
-| Key          | Action             | Description                  |
-| ------------ | ------------------ | ---------------------------- |
-| `<leader>d`  | Multi-cursor next  | Add cursor to next match     |
-| `<leader>a`  | Select all matches | Select all occurrences       |
-| `<leader>/`  | Toggle comment     | Comment/uncomment lines      |
-| `<leader>z`  | Zen mode           | Toggle distraction-free mode |
-| `<leader>pp` | Project manager    | Open project manager         |
+**ตัวอย่าง:**
+```javascript
+console.log("Hello");     // กด gcc
+// console.log("Hello");  // กลายเป็น comment
 
-### Window Management (Standalone)
+// เลือกหลายบรรทัดด้วย Visual mode แล้วกด gc
+```
 
-| Key              | Action            | Description                     |
-| ---------------- | ----------------- | ------------------------------- |
-| `<C-h/j/k/l>`    | Navigate windows  | Move between splits             |
-| `<C-Up/Down>`    | Resize height     | Increase/decrease window height |
-| `<C-Left/Right>` | Resize width      | Increase/decrease window width  |
-| `<S-h/l>`        | Buffer navigation | Previous/next buffer            |
+### 🎯 vim-surround - Text Object Manipulation
+> จัดการ quotes, brackets, tags ได้อย่างรวดเร็ว
 
-### Git Integration
+| Command       | Action            | Description                     |
+| ------------- | ----------------- | ------------------------------- |
+| `ys{motion}{char}` | Add surround  | ครอบข้อความด้วยตัวอักษร          |
+| `cs{old}{new}` | Change surround  | เปลี่ยนตัวครอบ                  |
+| `ds{char}`    | Delete surround  | ลบตัวครอบออก                    |
 
-| Key          | Action     | Environment     |
-| ------------ | ---------- | --------------- |
-| `<leader>gs` | Git status | All             |
-| `<leader>gd` | Git diff   | All             |
-| `<leader>gb` | Git blame  | All             |
-| `<leader>gc` | Git commit | Kiro/Standalone |
-| `<leader>gp` | Git push   | Kiro/Standalone |
+**ตัวอย่างการใช้งาน:**
+```javascript
+// Add surround
+hello world          // cursor บน hello
+ysw"                 // "hello" world (surround word with ")
+yss)                 // (hello world) (surround line with ())
 
-### Kiro Specific
+// Change surround  
+"hello world"        // cursor ที่ไหนก็ได้ในบรรทัด
+cs"'                 // 'hello world' (เปลี่ยนจาก " เป็น ')
+cs'<em>              // <em>hello world</em> (เปลี่ยนเป็น tag)
 
-| Key          | Action             | Description             |
-| ------------ | ------------------ | ----------------------- |
-| `<leader>ai` | AI assistance      | Access Kiro AI features |
-| `<leader>sp` | Specs directory    | Open specs folder       |
-| `<leader>st` | Steering directory | Open steering folder    |
-| `<leader>pk` | Kiro config        | Open .kiro directory    |
-| `<leader>pm` | MCP config         | Edit MCP configuration  |
+// Delete surround
+'hello world'        // cursor ที่ไหนก็ได้ในบรรทัด
+ds'                  // hello world (ลบ ' ออก)
+```
 
-### Text Editing
+### 🔗 nvim-autopairs - Auto Complete Pairs
+> เติม brackets, quotes อัตโนมัติ
 
-| Key         | Action                | Description                        |
-| ----------- | --------------------- | ---------------------------------- |
-| `gcc`       | Comment line          | Toggle line comment                |
-| `gc`        | Comment operator      | Comment with motion                |
-| `<` / `>`   | Indent (visual)       | Indent and reselect                |
-| `<leader>r` | Replace with register | Replace text with register         |
-| `<leader>p` | Paste (no overwrite)  | Paste without overwriting register |
+| Input | Result | Description              |
+| ----- | ------ | ------------------------ |
+| `(`   | `()`   | เติม closing bracket      |
+| `[`   | `[]`   | เติม closing square bracket |
+| `{`   | `{}`   | เติม closing curly bracket |
+| `"`   | `""`   | เติม closing quote        |
+| `'`   | `''`   | เติม closing single quote |
 
-### Search & Replace
+### 🔧 Enhanced Editing (Built-in Improvements)
+| Key           | Action                    | Description                      |
+| ------------- | ------------------------- | -------------------------------- |
+| `gm`          | Go to matching bracket    | ไปที่ bracket คู่                 |
+| `Y`           | Yank to end of line       | copy จาก cursor ถึงจบบรรทัด        |
+| `<leader>p`   | Paste (no overwrite)      | paste โดยไม่เขียนทับ register     |
+| `<leader>s`   | Substitute character      | แทนที่ตัวอักษร (ทดแทน `s` เดิม)   |
+| `<` / `>`     | Indent (stays selected)   | เยื้องและคงการเลือกไว้             |
 
-| Key          | Action              | Environment |
-| ------------ | ------------------- | ----------- |
-| `<leader>ss` | Search in files     | All         |
-| `<leader>sr` | Replace in files    | All         |
-| `/`          | Search forward      | All         |
-| `?`          | Search backward     | All         |
-| `n` / `N`    | Next/previous match | All         |
+### 💻 VS Code Integration
+| Key         | Action                 | Description              |
+| ----------- | ---------------------- | ------------------------ |
+| `<leader>v` | Split editor vertical  | แบ่งหน้าจอแนวตั้ง         |
+| `<leader>h` | Focus left editor      | โฟกัสไปหน้าจอซ้าย        |
+| `<leader>l` | Focus right editor     | โฟกัสไปหน้าจอขวา         |
 
-## 🔧 Configuration
+### 🖥️ Standalone Neovim (Window Management)
+| Key              | Action           | Description               |
+| ---------------- | ---------------- | ------------------------- |
+| `<C-h/j/k/l>`    | Navigate windows | เปลี่ยนไปมาระหว่าง split   |
 
-### Environment Detection
+### ⌨️ Built-in Vim (ยังใช้ได้ปกติ)
+| Key       | Action                | Description                  |
+| --------- | --------------------- | ---------------------------- |
+| `f{char}` | Find character forward | หาตัวอักษรไปข้างหน้า         |
+| `F{char}` | Find character backward | หาตัวอักษรไปข้างหลัง        |
+| `*` / `#` | Search word           | ค้นหาคำใต้ cursor             |
+| `n` / `N` | Next/prev search      | ค้นหาต่อ/กลับ                |
+| `gd`      | Go to definition      | ไปที่ definition (VS Code)   |
+| `gr`      | Go to references      | ไปที่ references (VS Code)   |
+| `K`       | Show hover            | แสดงข้อมูล hover (VS Code)   |
 
-The configuration automatically detects your environment:
+## 🔧 Configuration Details
 
-- **VS Code**: `vim.g.vscode` is set
-- **Kiro**: `vim.g.kiro` is set
-- **Standalone**: Neither flag is set
+### 🎯 Plugins Overview (VS Code Environment)
 
-### Plugin Loading
+**Only 5 Essential Plugins:**
+1. **Flash.nvim** - Super fast navigation with 2-character jump
+2. **Spider.nvim** - Smart word movement for camelCase
+3. **Comment.nvim** - Toggle comments with gcc/gc
+4. **vim-surround** - Manipulate quotes, brackets, tags
+5. **nvim-autopairs** - Auto-complete brackets and quotes
 
-Plugins are loaded conditionally based on environment:
+### 🚀 Performance Features
 
-- **Universal**: Core Vim plugins (surround, repeat, etc.)
-- **VS Code**: Minimal set with VS Code integration
-- **Kiro**: Enhanced set with AI workflow support
-- **Standalone**: Full feature set with LSP, Treesitter, etc.
+- **Single File Configuration** - Everything in `init.lua`
+- **Environment Detection** - Automatically loads VS Code vs Standalone configs
+- **Lazy Loading** - Plugins load only when needed
+- **Instant Startup** - No delays or lag
 
-### Performance Monitoring
+### 🔍 Environment Detection
 
-Check startup performance and environment info:
-
-```vim
-:PluginEnvInfo        " Show environment information
-:PluginHealthCheck    " Run health diagnostics
+```lua
+if vim.g.vscode then
+  -- VS Code specific plugins and keymaps
+else  
+  -- Standalone Neovim (basic setup)
+end
 ```
 
 ## 🎨 Customization
 
-### Theme Configuration
-
-The configuration uses Catppuccin theme by default. To change:
-
-```lua
--- In lua/config/init.lua
-_G.nvim_config.preferences.theme = "your-theme-name"
-```
-
 ### Adding Custom Keybindings
 
-```lua
--- In lua/config/keymaps.lua or your custom config
-local keymap = vim.keymap.set
+Add to `init.lua` in the appropriate environment section:
 
-keymap("n", "<leader>custom", function()
-  -- Your custom function
-end, { desc = "Custom action" })
+```lua
+-- For VS Code
+if vim.g.vscode then
+  vim.keymap.set("n", "<leader>custom", function()
+    -- Your custom function
+  end, { desc = "Custom action" })
+end
 ```
 
-### Environment-Specific Plugins
+### Adding Plugins
+
+Add to the `require("lazy").setup({})` table:
 
 ```lua
--- In your plugin configuration
-return {
-  "your-plugin/name",
-  enabled = function()
-    return require("utils.plugin_loader").env.is_standalone
-  end,
+{
+  "author/plugin-name",
+  event = "VeryLazy",  -- or specific trigger
   config = function()
-    -- Plugin configuration
+    require("plugin-name").setup()
   end,
 }
 ```
@@ -246,49 +267,34 @@ rm -rf ~/.cache/nvim/
 
 ### VS Code Integration Issues
 
-1. Ensure VS Code Neovim extension is installed
+1. Install [VSCode Neovim extension](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim)
 2. Check Neovim path in VS Code settings
-3. Verify `keyboard.dispatch` is set to `keyCode`
+3. Set `"keyboard.dispatch": "keyCode"` in settings.json
 
-### Performance Issues
+### Plugin Issues
 
-1. Check startup time: `:PluginEnvInfo`
-2. Profile plugins: `:Lazy profile`
-3. Disable unused plugins for your environment
-
-### Font Issues
-
-Install a Nerd Font for proper icon display:
-
-```bash
-# macOS
-brew install font-jetbrains-mono-nerd-font
-
-# Manual installation
-# Download from: https://www.nerdfonts.com/
+Check plugin status and health:
+```vim
+:Lazy        " Plugin manager
+:checkhealth " Health diagnostics
 ```
 
-## 📚 Additional Resources
+## 📚 Quick Reference
 
+### Useful Commands
+```vim
+:Lazy        " Plugin manager
+:Lazy sync   " Update all plugins
+:help <key>  " Get help for any key
+```
+
+### Links
 - [Neovim Documentation](https://neovim.io/doc/)
-- [Lazy.nvim Plugin Manager](https://github.com/folke/lazy.nvim)
+- [Lazy.nvim Plugin Manager](https://github.com/folke/lazy.nvim)  
 - [VS Code Neovim Extension](https://github.com/vscode-neovim/vscode-neovim)
-- [Kiro IDE](https://kiro.ai/)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test across environments
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-**Happy coding!** 🎉
+**🎯 สรุป:** Configuration นี้เน้นความเร็วและ productivity สำหรับการใช้งานใน VS Code เป็นหลัก ด้วย plugins เพียง 5 ตัวที่คัดเลือกมาอย่างดี
 
-> This configuration is designed to enhance your development experience across all environments. Press `<leader>h` in any environment to see available keybindings!
+> **Flash (s) + Spider (w/e/b) = การ navigate ที่เร็วที่สุด!** 🚀
