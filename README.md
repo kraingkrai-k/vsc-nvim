@@ -10,7 +10,7 @@ A minimal, performance-focused Neovim configuration designed primarily for **VS 
 - ⚡ **Ultra Fast**: Single file configuration with minimal plugins
 - 🔧 **Essential Tools**: Only 5 carefully selected plugins for maximum productivity
 - 🚀 **Instant Startup**: No delays or lag
-- 📱 **Standalone Ready**: Basic fallback for standalone Neovim
+- 🎨 **LazyVim UI**: Full IDE experience for standalone terminal usage
 
 ## 🚀 Quick Start
 
@@ -45,9 +45,9 @@ nvim
 
 1. Install the [VSCode Neovim extension](https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim)
 
-### Standalone Neovim
+### Standalone Neovim (LazyVim Experience)
 
-Works out of the box with basic configuration. More features can be added as needed.
+Full IDE-like experience with beautiful UI, file explorer, fuzzy finder, and Git integration. Perfect for terminal-based development.
 
 ## 📋 Cheat Sheet & Plugin Guide
 
@@ -201,11 +201,45 @@ ds'                  // hello world (ลบ ' ออก)
 | ----------- | ---------------- | --------------- |
 | `<leader>z` | Toggle Zen Mode  | เปิด/ปิด Zen Mode |
 
-### 🖥️ Standalone Neovim (Window Management)
+### 🖥️ Standalone Neovim (LazyVim UI Features)
 
-| Key           | Action           | Description              |
-| ------------- | ---------------- | ------------------------ |
-| `<C-h/j/k/l>` | Navigate windows | เปลี่ยนไปมาระหว่าง split |
+#### File Management
+| Key         | Action              | Description                        |
+| ----------- | ------------------- | ---------------------------------- |
+| `<leader>e` | Toggle Explorer     | เปิด/ปิด file tree (NvimTree)      |
+| `<leader>ff`| Find Files          | ค้นหาไฟล์ (Telescope)              |
+| `<leader>fg`| Live Grep           | ค้นหาข้อความในไฟล์ทั้งหมด          |
+| `<leader>fb`| Find Buffers        | ค้นหา buffer ที่เปิดอยู่          |
+| `<leader>fr`| Recent Files        | ไฟล์ที่เปิดล่าสุด                  |
+| `<leader>fh`| Help Tags           | ค้นหา help documentation          |
+
+#### Buffer & Window Management
+| Key         | Action              | Description                        |
+| ----------- | ------------------- | ---------------------------------- |
+| `<S-h>`     | Previous buffer     | ไปยัง buffer ก่อนหน้า              |
+| `<S-l>`     | Next buffer         | ไปยัง buffer ถัดไป                |
+| `<leader>bd`| Delete buffer       | ปิด buffer ปัจจุบัน               |
+| `<leader>bD`| Delete other buffers| ปิด buffer อื่นๆ ทั้งหมด          |
+| `<leader>Q` | Quit All            | ออกจาก Neovim ทั้งหมด             |
+| `<C-h/j/k/l>`| Navigate windows   | เปลี่ยนไปมาระหว่าง split           |
+
+#### Git Integration (GitSigns)
+| Key         | Action              | Description                        |
+| ----------- | ------------------- | ---------------------------------- |
+| `]c`        | Next hunk           | ไปยัง Git change ถัดไป             |
+| `[c`        | Previous hunk       | ไปยัง Git change ก่อนหน้า          |
+| `<leader>hs`| Stage hunk          | Stage การเปลี่ยนแปลงปัจจุบัน       |
+| `<leader>hr`| Reset hunk          | ยกเลิกการเปลี่ยนแปลง               |
+| `<leader>hp`| Preview hunk        | ดูตัวอย่างการเปลี่ยนแปลง           |
+| `<leader>hb`| Blame line          | ดูว่าใครแก้ไขบรรทัดนี้             |
+| `<leader>hd`| Diff this           | ดู diff ของไฟล์                   |
+
+#### Enhanced Editing
+| Key         | Action              | Description                        |
+| ----------- | ------------------- | ---------------------------------- |
+| `j`/`k`     | Smart up/down       | เคลื่อนไหวแบบ visual line          |
+| `<Esc>`     | Clear search        | ล้าง search highlighting           |
+| `<C-s>`     | Quick save          | บันทึกไฟล์เร็ว (ทุก mode)          |
 
 ### ⌨️ Built-in Vim (ยังใช้ได้ปกติ)
 
@@ -221,15 +255,29 @@ ds'                  // hello world (ลบ ' ออก)
 
 ## 🔧 Configuration Details
 
-### 🎯 Plugins Overview (VS Code Environment)
+### 🎯 Plugins Overview
 
-**Only 5 Essential Plugins:**
+#### VS Code Environment (5 Essential Plugins)
 
 1. **Flash.nvim** - Super fast navigation with 2-character jump
 2. **Spider.nvim** - Smart word movement for camelCase
 3. **Comment.nvim** - Toggle comments with gcc/gc
 4. **vim-surround** - Manipulate quotes, brackets, tags
 5. **nvim-autopairs** - Auto-complete brackets and quotes
+
+#### Standalone Environment (LazyVim-Inspired)
+
+**Core Plugins (Same as VS Code):**
+- Flash.nvim, Spider.nvim, Comment.nvim, vim-surround, nvim-autopairs
+
+**Additional UI & Features:**
+1. **tokyonight.nvim** - Beautiful colorscheme (LazyVim default)
+2. **lualine.nvim** - Status line with theme integration
+3. **bufferline.nvim** - Enhanced buffer/tab line
+4. **nvim-tree.lua** - File explorer sidebar
+5. **telescope.nvim** - Fuzzy finder for files/text
+6. **gitsigns.nvim** - Git integration and indicators
+7. **which-key.nvim** - Keybinding help popup
 
 ### 🚀 Performance Features
 
@@ -242,9 +290,11 @@ ds'                  // hello world (ลบ ' ออก)
 
 ```lua
 if vim.g.vscode then
-  -- VS Code specific plugins and keymaps
+  -- VS Code: Minimal 5 plugins for maximum stability
+  -- Focus on text editing enhancements
 else
-  -- Standalone Neovim (basic setup)
+  -- Standalone: Full LazyVim-inspired IDE experience
+  -- Complete UI with file explorer, fuzzy finder, Git integration
 end
 ```
 
