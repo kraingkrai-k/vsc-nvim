@@ -6,7 +6,7 @@ end
 
 -- VS Code specific keymaps
 -- File explorer
-vim.keymap.set("n", "<leader>e", "<cmd>lua require('vscode').action('workbench.action.toggleSidebarVisibility')<cr>", { desc = "Toggle Explorer" })
+vim.keymap.set("n", "<leader>e", "<cmd>lua require('vscode').action('workbench.view.explorer')<cr>", { desc = "Focus Explorer" })
 
 -- Find files  
 vim.keymap.set("n", "<leader>ff", "<cmd>lua require('vscode').action('workbench.action.quickOpen')<cr>", { desc = "Find Files" })
