@@ -38,6 +38,7 @@ vim.keymap.set("n", "<C-l>", "<cmd>lua require('vscode').action('workbench.actio
 vim.keymap.set("n", "<C-j>", "<cmd>lua require('vscode').action('workbench.action.focusBelowGroup')<cr>", { desc = "Focus Below Window" })
 vim.keymap.set("n", "<C-k>", "<cmd>lua require('vscode').action('workbench.action.focusAboveGroup')<cr>", { desc = "Focus Above Window" })
 
+
 -- Zen Mode & Additional Features
 vim.keymap.set("n", "<leader>z", "<cmd>lua require('vscode').action('workbench.action.toggleZenMode')<cr>", { desc = "Toggle Zen Mode" })
 

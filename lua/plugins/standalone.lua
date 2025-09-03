@@ -302,4 +302,44 @@ return {
       })
     end,
   },
+
+  -- Multi-cursor for standalone Neovim (vim-visual-multi)
+  {
+    "mg979/vim-visual-multi",
+    keys = {
+      { "gn", desc = "Multi-cursor select next" },
+      { "gN", desc = "Multi-cursor select previous" },
+      { "gb", desc = "Multi-cursor add cursor" },
+      { "<leader>ma", desc = "Multi-cursor select all" },
+    },
+    config = function()
+      -- Configure vim-visual-multi to match VS Code and common vim patterns
+      vim.g.VM_default_mappings = 0  -- Disable default mappings
+      vim.g.VM_mouse_mappings = 1    -- Enable mouse support
+      
+      -- Custom mappings to avoid conflicts with vim defaults
+      vim.g.VM_maps = {
+        ['Find Under']                  = 'gn',           -- gn (vim-friendly)
+        ['Find Subword Under']          = 'gn',
+        ['Add Cursor At Pos']           = 'gb',           -- gb (vim-visual-multi style)  
+        ['Select All']                  = '<leader>ma',   -- Select all matches
+        ['Start Regex Search']          = '<leader>/',    -- Regex search mode
+        ['Add Cursor Up']               = '<C-Up>',       -- Add cursor up
+        ['Add Cursor Down']             = '<C-Down>',     -- Add cursor down
+        ['Select Cursor Up']            = '<M-C-Up>',     -- Select cursor up
+        ['Select Cursor Down']          = '<M-C-Down>',   -- Select cursor down
+        ['Skip Region']                 = '<C-x>',        -- Skip current match
+        ['Remove Region']               = 'q',            -- Remove current cursor/region
+        ['Increase']                    = '+',            -- Increase selection
+        ['Decrease']                    = '_',            -- Decrease selection
+        ['Toggle Mappings']             = '<leader>mt',   -- Toggle VM mappings
+      }
+      
+      -- VM settings for better UX
+      vim.g.VM_set_statusline = 2           -- Set statusline
+      vim.g.VM_silent_exit = 1              -- Don't show exit message
+      vim.g.VM_show_warnings = 1            -- Show warnings
+      vim.g.VM_highlight_matches = 'underline'  -- Highlight style
+    end,
+  },
 }
