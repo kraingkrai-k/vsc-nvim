@@ -85,6 +85,14 @@ return {
             },
           },
         },
+        filters = {
+          dotfiles = false,  -- Show dotfiles including .gitignore
+          git_ignored = false,  -- Show git ignored files
+        },
+        git = {
+          enable = true,
+          ignore = false,  -- Show files ignored by git
+        },
       })
     end,
   },
@@ -105,11 +113,25 @@ return {
         defaults = {
           prompt_prefix = " ",
           selection_caret = " ",
+          file_ignore_patterns = {
+            "node_modules/.*",
+            "%.git/.*",
+            "dist/.*",
+            "build/.*",
+            "%.next/.*",
+            "coverage/.*",
+            "%.nyc_output/.*"
+          },
           mappings = {
             i = {
               ["<C-j>"] = "move_selection_next",
               ["<C-k>"] = "move_selection_previous",
             },
+          },
+        },
+        pickers = {
+          find_files = {
+            hidden = true,  -- Show hidden files but respect ignore patterns
           },
         },
       })
@@ -187,5 +209,97 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    config = function()
+      -- Configure LazyGit to use Escape key to close
+      vim.g.lazygit_floating_window_winblend = 0 -- transparency of floating window
+      vim.g.lazygit_floating_window_scaling_factor = 0.9 -- scaling factor for floating window
+      vim.g.lazygit_floating_window_corner_chars = {'╭', '╮', '╰', '╯'} -- customize lazygit popup window corner characters
+      vim.g.lazygit_use_neovim_remote = 1 -- for neovim-remote support
+      
+      -- Add keymap to close LazyGit with Escape in the LazyGit buffer
+      vim.api.nvim_create_autocmd("TermOpen", {
+        pattern = "*lazygit*",
+        callback = function()
+          vim.keymap.set("t", "<Esc>", "<cmd>close<cr>", { buffer = true, silent = true })
+        end,
+      })
+    end,
+  },
+
+  -- LSP Configuration
+  {
+    "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      -- LSP keymaps
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+        callback = function(ev)
+          local opts = { buffer = ev.buf, silent = true }
+          
+          -- Go to definition (same as VS Code)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
+          
+          -- Show hover (same as VS Code)
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Show hover" }))
+          
+          -- Find references using Telescope (better than VS Code!)
+          vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", vim.tbl_extend("force", opts, { desc = "Find references" }))
+          
+          -- Additional useful LSP keymaps
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Go to declaration" }))
+          vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
+          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
+          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
+          vim.keymap.set("n", "<leader>D", "<cmd>Telescope lsp_type_definitions<cr>", vim.tbl_extend("force", opts, { desc = "Type definition" }))
+        end,
+      })
+
+      -- Configure common language servers
+      local servers = {
+        ts_ls = {},    -- TypeScript/JavaScript (updated from tsserver)
+        gopls = {},    -- Go
+        lua_ls = {     -- Lua
+          settings = {
+            Lua = {
+              diagnostics = { globals = { "vim" } },
+              workspace = { checkThirdParty = false },
+            },
+          },
+        },
+      }
+
+      -- Setup servers
+      for server, config in pairs(servers) do
+        require("lspconfig")[server].setup(config)
+      end
+    end,
+  },
+
+  -- Mason for LSP server management
+  {
+    "williamboman/mason.nvim",
+    cmd = "Mason",
+    keys = {
+      { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" },
+    },
+    config = function()
+      require("mason").setup()
+    end,
+  },
+
+  -- Mason LSP config integration
+  {
+    "williamboman/mason-lspconfig.nvim",
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "ts_ls", "gopls", "lua_ls" },
+        automatic_installation = true,
+      })
+    end,
   },
 }
