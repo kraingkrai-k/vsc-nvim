@@ -37,8 +37,188 @@
   },
   
   "workbench.colorCustomizations": {
-    "editorCursor.foreground": "#E5C07B",
-    "terminalCursor.foreground": "#1bb66e"
+    // Tokyo Night + Vira Fusion - Base Colors
+    "editor.background": "#1a1b26",
+    "sideBar.background": "#16161e",
+    "activityBar.background": "#16161e",
+    "statusBar.background": "#16161e",
+    "titleBar.activeBackground": "#16161e",
+    "panel.background": "#16161e",
+
+    // Text colors
+    "editor.foreground": "#c0caf5",
+    "sideBar.foreground": "#c0caf5",
+    "statusBar.foreground": "#c0caf5",
+
+    // Cursor (Vira accent)
+    "terminalCursor.foreground": "#80CBC4",
+    "editorCursor.foreground": "#80CBC4",
+
+    // Editor Selection and highlights
+    "editor.selectionBackground": "#80CBC433",
+    "editor.lineHighlightBackground": "#292e42",
+    "editor.wordHighlightBackground": "#80CBC422",
+    "editor.findMatchBackground": "#80CBC444",
+    "editor.findMatchHighlightBackground": "#80CBC433",
+    "editor.findMatchBorder": "#80CBC4",
+
+    // List/Tree - Enhanced hover and active (Vira accent)
+    "list.activeSelectionBackground": "#80CBC433",
+    "list.activeSelectionForeground": "#80CBC4",
+    "list.inactiveSelectionBackground": "#80CBC420",
+    "list.inactiveSelectionForeground": "#80CBC4",
+    "list.hoverBackground": "#80CBC426",
+    "list.hoverForeground": "#80CBC4",
+    "list.focusBackground": "#80CBC433",
+    "list.focusForeground": "#80CBC4",
+    "list.focusHighlightForeground": "#80CBC4",
+    "list.highlightForeground": "#80CBC4",
+    "list.activeSelectionIconForeground": "#80CBC4",
+    "list.inactiveSelectionIconForeground": "#80CBC4",
+    "list.dropBackground": "#80CBC426",
+
+    // Tree indentation
+    "tree.indentGuidesStroke": "#80CBC433",
+
+    // Tabs - Enhanced active file visibility
+    "tab.activeBackground": "#1a1b26",
+    "tab.activeForeground": "#80CBC4",
+    "tab.activeBorder": "#80CBC4",
+    "tab.activeBorderTop": "#80CBC400",
+    "tab.inactiveBackground": "#16161e",
+    "tab.inactiveForeground": "#565f89",
+    "tab.hoverBackground": "#80CBC426",
+    "tab.hoverForeground": "#80CBC4",
+    "tab.hoverBorder": "#80CBC480",
+    "tab.unfocusedActiveBorder": "#80CBC466",
+    "tab.unfocusedHoverBackground": "#80CBC420",
+    "tab.border": "#292e42",
+
+    // Sidebar active file highlight
+    "sideBar.dropBackground": "#80CBC426",
+    "sideBarSectionHeader.background": "#80CBC414",
+    "sideBarSectionHeader.foreground": "#80CBC4",
+    "sideBarSectionHeader.border": "#80CBC433",
+    "sideBar.border": "#292e42",
+
+    // Activity Bar (Vira accent)
+    "activityBar.activeBorder": "#80CBC4",
+    "activityBar.border": "#292e42",
+    "activityBarBadge.background": "#80CBC4",
+    "activityBarBadge.foreground": "#000000",
+
+    // Status Bar
+    "statusBarItem.remoteBackground": "#80CBC414",
+    "statusBarItem.remoteHoverBackground": "#80CBC4",
+    "statusBarItem.remoteForeground": "#80CBC4",
+    "statusBarItem.remoteHoverForeground": "#000000",
+    "statusBar.debuggingBackground": "#80CBC433",
+    "statusBar.debuggingForeground": "#80CBC4",
+
+    // Panel
+    "panel.border": "#292e42",
+    "panelTitle.activeBorder": "#80CBC4",
+    "panelTitle.activeForeground": "#80CBC4",
+
+    // Buttons and widgets (Vira accent)
+    "button.background": "#80CBC4",
+    "button.foreground": "#000000",
+    "button.hoverBackground": "#80CBC4cc",
+    "editorWidget.border": "#80CBC4",
+    "editorWidget.resizeBorder": "#80CBC4",
+
+    // Links and progress
+    "textLink.foreground": "#80CBC4",
+    "progressBar.background": "#80CBC4",
+
+    // Menu
+    "menu.selectionForeground": "#80CBC4",
+    "menu.selectionBackground": "#80CBC426",
+    "menubar.selectionForeground": "#80CBC4",
+    "menubar.selectionBackground": "#80CBC426",
+
+    // Breadcrumbs
+    "breadcrumb.activeSelectionForeground": "#80CBC4",
+
+    // Scrollbar
+    "scrollbarSlider.activeBackground": "#80CBC480",
+    "scrollbarSlider.hoverBackground": "#80CBC466",
+
+    // Other accents
+    "sash.hoverBorder": "#80CBC480",
+    "pickerGroup.foreground": "#80CBC4",
+    "settings.modifiedItemIndicator": "#80CBC4",
+    "notificationLink.foreground": "#80CBC4",
+
+    // Terminal colors (Tokyo Night)
+    "terminal.background": "#1a1b26",
+    "terminal.foreground": "#c0caf5",
+    "terminal.ansiBlack": "#15161e",
+    "terminal.ansiRed": "#f7768e",
+    "terminal.ansiGreen": "#9ece6a",
+    "terminal.ansiYellow": "#e0af68",
+    "terminal.ansiBlue": "#7aa2f7",
+    "terminal.ansiMagenta": "#bb9af7",
+    "terminal.ansiCyan": "#80CBC4",
+    "terminal.ansiWhite": "#c0caf5",
+
+    // Extension buttons and suggestions (Vira accent)
+    "extensionButton.background": "#80CBC414",
+    "extensionButton.foreground": "#80CBC4",
+    "extensionButton.hoverBackground": "#80CBC433",
+    "extensionButton.prominentBackground": "#80CBC414",
+    "extensionButton.prominentForeground": "#80CBC4",
+    "extensionButton.prominentHoverBackground": "#80CBC433",
+    "editorSuggestWidget.highlightForeground": "#80CBC4",
+
+    // Additional UI elements
+    "selection.background": "#80CBC440",
+    "notebook.inactiveFocusedCellBorder": "#80CBC480",
+    "commandCenter.activeBorder": "#80CBC480",
+    "chat.slashCommandForeground": "#80CBC4",
+    "chat.avatarForeground": "#80CBC4"
+  },
+  
+  // Tokyo Night syntax highlighting
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "keyword",
+        "settings": { "foreground": "#bb9af7" }
+      },
+      {
+        "scope": "string",
+        "settings": { "foreground": "#9ece6a" }
+      },
+      {
+        "scope": "constant.numeric",
+        "settings": { "foreground": "#ff9e64" }
+      },
+      {
+        "scope": "entity.name.function",
+        "settings": { "foreground": "#7aa2f7" }
+      },
+      {
+        "scope": "entity.name.type.class", 
+        "settings": { "foreground": "#e0af68" }
+      },
+      {
+        "scope": "comment",
+        "settings": { "foreground": "#565f89", "fontStyle": "italic" }
+      },
+      {
+        "scope": "variable.language.this",
+        "settings": { "foreground": "#f7768e", "fontStyle": "italic" }
+      },
+      {
+        "scope": "storage.type",
+        "settings": { "foreground": "#bb9af7" }
+      },
+      {
+        "scope": "constant.language",
+        "settings": { "foreground": "#ff9e64" }
+      }
+    ]
   },
   
   "editor.fontFamily": "JetBrainsMono Nerd Font, monospace",

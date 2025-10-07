@@ -39,6 +39,11 @@ vim.keymap.set("n", "<C-j>", "<cmd>lua require('vscode').action('workbench.actio
 vim.keymap.set("n", "<C-k>", "<cmd>lua require('vscode').action('workbench.action.focusAboveGroup')<cr>", { desc = "Focus Above Window" })
 
 
+-- Project Manager
+vim.keymap.set("n", "<leader>fp", "<cmd>lua require('vscode').action('projectManager.listProjects')<cr>", { desc = "List Projects" })
+vim.keymap.set("n", "<leader>ps", "<cmd>lua require('vscode').action('projectManager.saveProject')<cr>", { desc = "Save Project" })
+vim.keymap.set("n", "<leader>pe", "<cmd>lua require('vscode').action('projectManager.editProjects')<cr>", { desc = "Edit Projects" })
+
 -- Zen Mode & Additional Features
 vim.keymap.set("n", "<leader>z", "<cmd>lua require('vscode').action('workbench.action.toggleZenMode')<cr>", { desc = "Toggle Zen Mode" })
 
