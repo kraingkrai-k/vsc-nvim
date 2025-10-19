@@ -16,6 +16,11 @@ if vim.g.vscode then
   vim.keymap.set("n", "<C-s>", "<cmd>lua require('vscode').action('workbench.action.files.save')<cr>", { desc = "Save file" })
   vim.keymap.set("i", "<C-s>", "<cmd>lua require('vscode').action('workbench.action.files.save')<cr>", { desc = "Save file" })
   vim.keymap.set("v", "<C-s>", "<cmd>lua require('vscode').action('workbench.action.files.save')<cr>", { desc = "Save file" })
+
+  -- Code formatting
+  -- vim.keymap.set("n", "<D-S-i>", "<cmd>lua require('vscode').action('editor.action.formatDocument')<cr>", { desc = "Format document" })
+  -- vim.keymap.set("i", "<D-S-i>", "<cmd>lua require('vscode').action('editor.action.formatDocument')<cr>", { desc = "Format document" })
+  -- vim.keymap.set("v", "<D-S-i>", "<cmd>lua require('vscode').action('editor.action.format')<cr>", { desc = "Format selection" })
   
 else
   -- ===== STANDALONE NEOVIM KEYMAPS =====

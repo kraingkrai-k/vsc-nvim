@@ -55,5 +55,18 @@ vim.keymap.set("v", "<C-s>", "<cmd>lua require('vscode').action('workbench.actio
 -- Clear search highlighting
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlighting" })
 
+-- ========================================
+-- 🎯 Minimal Navigation Enhancements
+-- ========================================
+
+-- Peek Definition (ดูได้โดยไม่ต้องเปิดไฟล์ใหม่)
+vim.keymap.set("n", "gp", "<cmd>lua require('vscode').action('editor.action.peekDefinition')<cr>", { desc = "Peek Definition" })
+
+-- Quick Switch Recent File (toggle ไป-กลับระหว่าง 2 files)
+vim.keymap.set("n", "<leader><leader>", "<cmd>lua require('vscode').action('workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup')<cr>", { desc = "Toggle Recent File" })
+
+-- Go to Symbol in File (outline ของไฟล์)
+vim.keymap.set("n", "<leader>o", "<cmd>lua require('vscode').action('workbench.action.gotoSymbol')<cr>", { desc = "Go to Symbol" })
+
 -- Return empty table since VS Code doesn't need plugin specs
 return {}

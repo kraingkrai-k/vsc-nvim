@@ -226,7 +226,7 @@ return {
     end,
   },
 
-  -- LSP Configuration
+  -- LSP Configuration (using new vim.lsp.config API for Neovim 0.11+)
   {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
@@ -240,16 +240,16 @@ return {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
           local opts = { buffer = ev.buf, silent = true }
-          
+
           -- Go to definition (same as VS Code)
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
-          
+
           -- Show hover (same as VS Code)
           vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Show hover" }))
-          
+
           -- Find references using Telescope (better than VS Code!)
           vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", vim.tbl_extend("force", opts, { desc = "Find references" }))
-          
+
           -- Additional useful LSP keymaps
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Go to declaration" }))
           vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<cr>", vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
@@ -259,23 +259,62 @@ return {
         end,
       })
 
-      -- Configure common language servers
-      local servers = {
-        ts_ls = {},    -- TypeScript/JavaScript (updated from tsserver)
-        gopls = {},    -- Go
-        lua_ls = {     -- Lua
+      -- Check if vim.lsp.config is available (Neovim 0.11+)
+      if vim.lsp.config then
+        -- Use new vim.lsp.config API (Neovim 0.11+)
+
+        -- TypeScript/JavaScript
+        vim.lsp.config.ts_ls = {
+          cmd = { 'typescript-language-server', '--stdio' },
+          filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+          root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+        }
+
+        -- Go
+        vim.lsp.config.gopls = {
+          cmd = { 'gopls' },
+          filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+          root_markers = { 'go.work', 'go.mod', '.git' },
+        }
+
+        -- Lua
+        vim.lsp.config.lua_ls = {
+          cmd = { 'lua-language-server' },
+          filetypes = { 'lua' },
+          root_markers = { '.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git' },
           settings = {
             Lua = {
               diagnostics = { globals = { "vim" } },
               workspace = { checkThirdParty = false },
             },
           },
-        },
-      }
+        }
 
-      -- Setup servers
-      for server, config in pairs(servers) do
-        require("lspconfig")[server].setup(config)
+        -- Enable servers (new API auto-starts on filetype match)
+        vim.lsp.enable('ts_ls')
+        vim.lsp.enable('gopls')
+        vim.lsp.enable('lua_ls')
+
+      else
+        -- Fallback to old lspconfig API for Neovim < 0.11
+        local lspconfig = require("lspconfig")
+
+        local servers = {
+          ts_ls = {},    -- TypeScript/JavaScript
+          gopls = {},    -- Go
+          lua_ls = {     -- Lua
+            settings = {
+              Lua = {
+                diagnostics = { globals = { "vim" } },
+                workspace = { checkThirdParty = false },
+              },
+            },
+          },
+        }
+
+        for server, config in pairs(servers) do
+          lspconfig[server].setup(config)
+        end
       end
     end,
   },
