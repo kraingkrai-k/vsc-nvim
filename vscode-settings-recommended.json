@@ -1,0 +1,27 @@
+{
+  // === VS Code Neovim Extension ===
+  "vscode-neovim.neovimClean": false,
+  "vscode-neovim.neovimInitVimPaths.darwin": "$HOME/.config/nvim/init.lua",
+  "vscode-neovim.compositeKeys": {
+    "jk": {
+      "command": "vscode-neovim.escape"
+    }
+  },
+
+  // Critical: fix key dispatch for vim keybindings
+  "keyboard.dispatch": "keyCode",
+
+  // Run neovim extension in a dedicated process (reduces input lag)
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+
+  // === Editor behavior for vim ===
+  "editor.lineNumbers": "on",
+  "editor.cursorBlinking": "solid",
+  "editor.cursorSmoothCaretAnimation": "off",
+  "editor.smoothScrolling": false,
+
+  // Disable auto-save (use <C-s> or <leader>w instead)
+  "files.autoSave": "off"
+}

@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Neovim
+lazy-lock.json
+plugin/
+
+# AI / IDE tools
+CLAUDE.md
+.claude/
+.kiro/
+.vscode/
+
+# Personal notes
+cli.md
