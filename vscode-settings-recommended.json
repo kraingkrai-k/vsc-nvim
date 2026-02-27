@@ -1,7 +1,19 @@
 {
+  // ================================================================
+  // VS Code Settings - Synced with Neovim Config
+  // ================================================================
+  // วิธีใช้: copy settings เหล่านี้ไป user settings.json ของแต่ละเครื่อง
+  //   Cmd+Shift+P → "Preferences: Open User Settings (JSON)"
+  //
+  // หรือ symlink:
+  //   ln -sf ~/path-to-repo/vscode-settings-recommended.json \
+  //          ~/Library/Application\ Support/Code/User/settings.json
+  // ================================================================
+
   // === VS Code Neovim Extension ===
   "vscode-neovim.neovimClean": false,
   "vscode-neovim.neovimInitVimPaths.darwin": "$HOME/.config/nvim/init.lua",
+  "vscode-neovim.neovimInitVimPaths.linux": "$HOME/.config/nvim/init.lua",
   "vscode-neovim.compositeKeys": {
     "jk": {
       "command": "vscode-neovim.escape"
@@ -16,12 +28,41 @@
     "asvetliakov.vscode-neovim": 1
   },
 
-  // === Editor behavior for vim ===
-  "editor.lineNumbers": "on",
+  // === Editor: Match Neovim options.lua ===
+
+  // relativenumber ON — จำเป็นสำหรับ count motions (5j, 8k, d3j)
+  "editor.lineNumbers": "relative",
+
+  // scrolloff = 8 — เห็นบริบทรอบ cursor เสมอ
+  "editor.cursorSurroundingLines": 8,
+
+  // Solid cursor — ชัดเจน ไม่กระพริบรบกวน
   "editor.cursorBlinking": "solid",
+
+  // ปิด smooth animation — Vim ต้อง instant response
   "editor.cursorSmoothCaretAnimation": "off",
   "editor.smoothScrolling": false,
 
-  // Disable auto-save (use <C-s> or <leader>w instead)
-  "files.autoSave": "off"
+  // Disable auto-save — ใช้ <C-s> หรือ <leader>w แทน (Vim way)
+  "files.autoSave": "off",
+
+  // === Editor: Optimize for Vim Workflow ===
+
+  // ปิด minimap — ไม่จำเป็นเมื่อมี flash + search
+  "editor.minimap.enabled": false,
+
+  // ปิด breadcrumbs — ลด visual noise
+  "breadcrumbs.enabled": false,
+
+  // Word wrap off — ตรงกับ Neovim wrap = false
+  "editor.wordWrap": "off",
+
+  // Tab = 2 spaces — ตรงกับ Neovim tabstop/shiftwidth
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+
+  // === Zen Mode (เรียกด้วย <leader>z) ===
+  "zenMode.hideLineNumbers": false,
+  "zenMode.centerLayout": true,
+  "zenMode.fullScreen": false
 }

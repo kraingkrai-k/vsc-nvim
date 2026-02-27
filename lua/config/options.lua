@@ -10,11 +10,11 @@ vim.opt.titlestring = "%{fnamemodify(getcwd(), ':t')} - nvim"
 
 -- Basic options - optimized for VS Code + plugins
 vim.opt.number = true
-vim.opt.relativenumber = false  -- ไม่จำเป็นแล้วเพราะมี flash.nvim
+vim.opt.relativenumber = true   -- จำเป็นสำหรับ count motions (5j, 8k, d3j)
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.clipboard = "unnamedplus"
-vim.opt.cursorline = true       -- highlight บรรทัดปัจจุบัน (ดีกว่า relative number)
+vim.opt.cursorline = true       -- highlight บรรทัดปัจจุบัน (ใช้คู่กับ relativenumber)
 vim.opt.scrolloff = 8           -- เห็นบริบทรอบ ๆ cursor
 
 -- Additional options for standalone Neovim

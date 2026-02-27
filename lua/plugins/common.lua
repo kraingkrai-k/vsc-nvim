@@ -52,12 +52,15 @@ return {
   },
 
   -- Spider - smart word movement (camelCase aware)
+  -- ย้ายไป Alt key เพื่อให้ w/e/b เป็น native Vim (ฝึก standard ก่อน)
+  -- native w/e/b = word boundary ปกติ (ใช้ได้ทุกเครื่อง)
+  -- Alt-w/e/b = camelCase aware (bonus สำหรับ code)
   {
     "chrisgrieser/nvim-spider",
     keys = {
-      { "w", function() require("spider").motion("w") end, mode = { "n", "o", "x" }, desc = "Spider-w" },
-      { "e", function() require("spider").motion("e") end, mode = { "n", "o", "x" }, desc = "Spider-e" },
-      { "b", function() require("spider").motion("b") end, mode = { "n", "o", "x" }, desc = "Spider-b" },
+      { "<A-w>", function() require("spider").motion("w") end, mode = { "n", "o", "x" }, desc = "Spider-w (camelCase)" },
+      { "<A-e>", function() require("spider").motion("e") end, mode = { "n", "o", "x" }, desc = "Spider-e (camelCase)" },
+      { "<A-b>", function() require("spider").motion("b") end, mode = { "n", "o", "x" }, desc = "Spider-b (camelCase)" },
     },
     opts = {
       skipInsignificantPunctuation = true,

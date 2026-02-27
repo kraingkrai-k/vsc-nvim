@@ -65,11 +65,26 @@ else
   vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
   vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
+  -- Centered scroll (ไม่หลงทางเมื่อ scroll)
+  vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down centered" })
+  vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up centered" })
+
+  -- Centered search (cursor อยู่กลางจอเสมอเมื่อ search)
+  vim.keymap.set("n", "n", "nzzzv", { desc = "Next search centered" })
+  vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev search centered" })
+
   -- Clear search highlighting
   vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear hlsearch" })
 end
 
 -- ===== Common keymaps (both environments) =====
+
+-- Exit insert mode without reaching for Esc (home row friendly)
+vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
+
+-- Join lines without cursor jumping (LazyVim standard)
+vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines (cursor stays)" })
+
 vim.keymap.set("n", "gm", "%", { desc = "Go to matching bracket" })
 vim.keymap.set("v", "gm", "%", { desc = "Go to matching bracket" })
 vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
