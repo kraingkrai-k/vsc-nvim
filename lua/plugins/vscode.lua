@@ -13,10 +13,13 @@ vim.keymap.set("n", "<leader>e", function() vscode.action("workbench.view.explor
 vim.keymap.set("n", "<leader>ff", function() vscode.action("workbench.action.quickOpen") end, { desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", function() vscode.action("workbench.action.findInFiles") end, { desc = "Live grep" })
 vim.keymap.set("n", "<leader>fb", function() vscode.action("workbench.action.showAllEditors") end, { desc = "Buffers" })
-vim.keymap.set("n", "<leader>fr", function() vscode.action("workbench.action.openRecent") end, { desc = "Recent files" })
+vim.keymap.set("n", "<leader>fr", function() vscode.action("workbench.action.openRecent") end, { desc = "Recent projects" })
 
 -- Git
-vim.keymap.set("n", "<leader>gg", function() vscode.action("workbench.view.scm") end, { desc = "Git (SCM)" })
+vim.keymap.set("n", "<leader>gg", function()
+  vscode.action("workbench.view.scm")
+  vscode.action("workbench.action.focusActiveEditorGroup")
+end, { desc = "Git (SCM)" })
 vim.keymap.set("n", "<leader>gd", function() vscode.action("git.openChange") end, { desc = "Git diff" })
 vim.keymap.set("n", "<leader>gb", function() vscode.action("gitlens.toggleFileBlame") end, { desc = "Git blame" })
 
@@ -48,8 +51,9 @@ vim.keymap.set("n", "<leader>cd", function() vscode.action("editor.action.marker
 vim.keymap.set("n", "<leader>fp", function() vscode.action("projectManager.listProjects") end, { desc = "Projects" })
 vim.keymap.set("n", "<leader>z", function() vscode.action("workbench.action.toggleZenMode") end, { desc = "Zen mode" })
 vim.keymap.set("n", "gp", function() vscode.action("editor.action.peekDefinition") end, { desc = "Peek definition" })
-vim.keymap.set("n", "<leader><leader>", function() vscode.action("workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup") end, { desc = "Toggle recent file" })
-vim.keymap.set("n", "<leader>o", function() vscode.action("workbench.action.gotoSymbol") end, { desc = "Go to symbol" })
+vim.keymap.set("n", "<leader><leader>", function() vscode.action("workbench.action.quickOpenPreviousRecentlyUsedEditor") end, { desc = "Toggle recent file" })
+vim.keymap.set("n", "<leader>o", function() vscode.action("workbench.action.gotoSymbol") end, { desc = "Go to symbol (file)" })
+vim.keymap.set("n", "<leader>sS", function() vscode.action("workbench.action.showAllSymbols") end, { desc = "Go to symbol (project)" })
 
 -- Clear search highlighting
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear hlsearch" })
