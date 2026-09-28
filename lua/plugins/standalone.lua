@@ -88,7 +88,11 @@ return {
   -- Fuzzy finder
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      -- fzf syntax in prompt: 'exact ^prefix suffix$ !negate
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    },
     keys = {
       { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
@@ -121,6 +125,7 @@ return {
           find_files = { hidden = true },
         },
       })
+      pcall(require("telescope").load_extension, "fzf")
     end,
   },
 
@@ -286,6 +291,28 @@ return {
         end
       end
     end,
+  },
+
+  -- Markdown rendering in buffer (headings, tables, checkboxes)
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown" },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {},
+  },
+
+  -- Inline images + mermaid diagrams (needs Kitty graphics terminal + mmdc)
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = {
+      image = {
+        enabled = true,
+        -- cmux's embedded Ghostty lacks unicode placeholders: show images in a float on hover
+        doc = { inline = vim.env.CMUX_BUNDLED_CLI_PATH == nil },
+      },
+    },
   },
 
   -- Mason for LSP server management
