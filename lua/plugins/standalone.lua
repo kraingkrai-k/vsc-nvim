@@ -203,13 +203,6 @@ return {
       vim.g.lazygit_floating_window_scaling_factor = 0.9
       vim.g.lazygit_floating_window_corner_chars = { "╭", "╮", "╰", "╯" }
       vim.g.lazygit_use_neovim_remote = 1
-
-      vim.api.nvim_create_autocmd("TermOpen", {
-        pattern = "*lazygit*",
-        callback = function()
-          vim.keymap.set("t", "<Esc>", "<cmd>close<cr>", { buffer = true, silent = true })
-        end,
-      })
     end,
   },
 
