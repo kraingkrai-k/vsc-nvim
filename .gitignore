@@ -5,6 +5,7 @@
 lazy-lock.json
 plugin/
 .nvimlog
+nvim.log
 
 # AI / IDE tools
 CLAUDE.md
