@@ -43,7 +43,7 @@
   "editor.cursorSmoothCaretAnimation": "off",
   "editor.smoothScrolling": false,
 
-  // Disable auto-save — ใช้ <C-s> หรือ <leader>w แทน (Vim way)
+  // Disable auto-save — ใช้ <C-s> แทน (LazyVim standard)
   "files.autoSave": "off",
 
   // === Editor: Optimize for Vim Workflow ===
