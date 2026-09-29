@@ -189,20 +189,6 @@ return {
     end,
   },
 
-  -- LazyGit integration
-  {
-    "kdheepak/lazygit.nvim",
-    keys = {
-      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
-    },
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      vim.g.lazygit_floating_window_winblend = 0
-      vim.g.lazygit_floating_window_scaling_factor = 0.9
-      vim.g.lazygit_floating_window_corner_chars = { "╭", "╮", "╰", "╯" }
-    end,
-  },
-
   -- LSP Configuration
   {
     "neovim/nvim-lspconfig",
@@ -291,12 +277,17 @@ return {
     opts = {},
   },
 
-  -- Inline images + mermaid diagrams (needs Kitty graphics terminal + mmdc)
+  -- Snacks: images/mermaid (needs Kitty graphics terminal + mmdc), lazygit, bufdelete
   {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
+    keys = {
+      -- LazyVim standard: lazygit ใน float, กด e ใน lazygit เปิดไฟล์ใน nvim ตัวนี้ (nvim-remote)
+      { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+    },
     opts = {
+      lazygit = {},
       image = {
         enabled = true,
         -- cmux's embedded Ghostty lacks unicode placeholders: show images in a float on hover

@@ -62,7 +62,7 @@ lua/config/options.lua      Vim options
 lua/config/keymaps.lua      Core keymaps (env-specific)
 lua/plugins/common.lua      Shared plugins (4)
 lua/plugins/vscode.lua      VS Code keymaps
-lua/plugins/standalone.lua  Standalone UI + LSP (23)
+lua/plugins/standalone.lua  Standalone UI + LSP (22)
 ```
 
 ## Plugins
@@ -76,9 +76,9 @@ lua/plugins/standalone.lua  Standalone UI + LSP (23)
 | flash.nvim | `s` jump, `S` treesitter select |
 | nvim-spider | `<A-w>/<A-e>/<A-b>` camelCase-aware |
 
-### Standalone only - 23 plugins
+### Standalone only - 22 plugins
 
-tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, lazygit, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks, nvim-treesitter (`main` branch), nvim-treesitter-textobjects, mini.ai, nvim-ts-autotag (JSX tags), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`), grug-far (search & replace), trouble (diagnostics list), neotest + neotest-vitest (Vitest runner)
+tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks (lazygit, bufdelete, images), nvim-treesitter (`main` branch), nvim-treesitter-textobjects, mini.ai, nvim-ts-autotag (JSX tags), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`), grug-far (search & replace), trouble (diagnostics list), neotest + neotest-vitest (Vitest runner)
 
 Format on save runs prettier only in projects with a prettier config (`.prettierrc*` or `"prettier"` in `package.json`).
 
@@ -118,7 +118,7 @@ Leader: `<Space>`
 | `<leader>/` / `<leader>sg` | Grep (standalone) |
 | `<leader>sw` | Grep word under cursor / selection (standalone) |
 | `<leader>sR` | Resume last search (standalone) |
-| `<leader>ss` | Symbols in file (standalone) |
+| `<leader>ss` | Symbols in file |
 | `<leader>sS` | Symbols in project |
 | `<leader>sr` | Search & replace in project — grug-far (standalone) |
 
@@ -148,7 +148,7 @@ Leader: `<Space>`
 
 | Key | Action |
 |-----|--------|
-| `<leader>gg` | LazyGit / SCM |
+| `<leader>gg` | LazyGit (Snacks) / SCM |
 | `<leader>gd` | Git diff |
 | `<leader>gb` | Git blame |
 | `]h` / `[h` | Next/Prev hunk |
@@ -196,10 +196,8 @@ Leader: `<Space>`
 | Key | Action |
 |-----|--------|
 | `<leader>fp` | Projects |
-| `<leader>z` | Zen mode |
-| `gp` | Peek definition |
-| `<leader><leader>` | Toggle recent file |
-| `<leader>o` | Go to symbol (file) |
+| `<leader><leader>` | Find files (quick open) |
+| `<leader>uz` | Zen mode |
 
 ### Useful Vim Built-ins
 

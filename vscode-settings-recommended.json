@@ -61,7 +61,7 @@
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
 
-  // === Zen Mode (เรียกด้วย <leader>z) ===
+  // === Zen Mode (เรียกด้วย <leader>uz) ===
   "zenMode.hideLineNumbers": false,
   "zenMode.centerLayout": true,
   "zenMode.fullScreen": false

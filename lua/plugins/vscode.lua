@@ -13,7 +13,7 @@ vim.keymap.set("n", "<leader>e", function() vscode.action("workbench.view.explor
 vim.keymap.set("n", "<leader>ff", function() vscode.action("workbench.action.quickOpen") end, { desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", function() vscode.action("workbench.action.findInFiles") end, { desc = "Live grep" })
 vim.keymap.set("n", "<leader>fb", function() vscode.action("workbench.action.showAllEditors") end, { desc = "Buffers" })
-vim.keymap.set("n", "<leader>fr", function() vscode.action("workbench.action.openRecent") end, { desc = "Recent projects" })
+vim.keymap.set("n", "<leader>fr", function() vscode.action("workbench.action.openRecent") end, { desc = "Recent" })
 
 -- Git
 vim.keymap.set("n", "<leader>gg", function()
@@ -47,12 +47,12 @@ vim.keymap.set("n", "<leader>ca", function() vscode.action("editor.action.quickF
 vim.keymap.set("n", "<leader>cf", function() vscode.action("editor.action.formatDocument") end, { desc = "Format" })
 vim.keymap.set("n", "<leader>cd", function() vscode.action("editor.action.showHover") end, { desc = "Line diagnostics" })
 
--- VS Code unique features
+-- LazyVim standard keys mapped to VS Code actions
+-- (native <C-^> สลับไปไฟล์ล่าสุด, gp เป็น native put — ไม่ override)
+vim.keymap.set("n", "<leader><leader>", function() vscode.action("workbench.action.quickOpen") end, { desc = "Find files" })
 vim.keymap.set("n", "<leader>fp", function() vscode.action("projectManager.listProjects") end, { desc = "Projects" })
-vim.keymap.set("n", "<leader>z", function() vscode.action("workbench.action.toggleZenMode") end, { desc = "Zen mode" })
-vim.keymap.set("n", "gp", function() vscode.action("editor.action.peekDefinition") end, { desc = "Peek definition" })
-vim.keymap.set("n", "<leader><leader>", function() vscode.action("workbench.action.quickOpenPreviousRecentlyUsedEditor") end, { desc = "Toggle recent file" })
-vim.keymap.set("n", "<leader>o", function() vscode.action("workbench.action.gotoSymbol") end, { desc = "Go to symbol (file)" })
+vim.keymap.set("n", "<leader>uz", function() vscode.action("workbench.action.toggleZenMode") end, { desc = "Zen mode" })
+vim.keymap.set("n", "<leader>ss", function() vscode.action("workbench.action.gotoSymbol") end, { desc = "Go to symbol (file)" })
 vim.keymap.set("n", "<leader>sS", function() vscode.action("workbench.action.showAllSymbols") end, { desc = "Go to symbol (project)" })
 
 -- Clear search highlighting
