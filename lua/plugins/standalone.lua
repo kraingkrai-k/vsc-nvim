@@ -113,15 +113,8 @@ return {
         defaults = {
           prompt_prefix = " ",
           selection_caret = " ",
-          file_ignore_patterns = {
-            "node_modules/.*",
-            "%.git/.*",
-            "dist/.*",
-            "build/.*",
-            "%.next/.*",
-            "coverage/.*",
-            "%.nyc_output/.*",
-          },
+          -- fd/rg เคารพ .gitignore อยู่แล้ว (node_modules, dist, ...) → กันแค่ .git/ ที่โผล่เพราะ hidden = true
+          file_ignore_patterns = { "^%.git/", "/%.git/" },
           mappings = {
             i = {
               ["<C-j>"] = "move_selection_next",
@@ -155,7 +148,7 @@ return {
 
           local function map(mode, l, r, opts)
             opts = opts or {}
-            opts.buffer = bufnr
+            opts.buf = bufnr
             vim.keymap.set(mode, l, r, opts)
           end
 
@@ -221,8 +214,8 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+      "mason-org/mason.nvim",
+      "mason-org/mason-lspconfig.nvim",
       "saghen/blink.cmp", -- ต้องโหลดก่อน LSP start เพื่อส่ง completion capabilities
     },
     config = function()
@@ -237,7 +230,7 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
-          local opts = { buffer = ev.buf, silent = true }
+          local opts = { buf = ev.buf, silent = true }
 
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Go to declaration" }))
@@ -245,7 +238,6 @@ return {
           vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", vim.tbl_extend("force", opts, { desc = "References", nowait = true }))
           vim.keymap.set("n", "gI", "<cmd>Telescope lsp_implementations<cr>", vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
           vim.keymap.set("n", "gy", "<cmd>Telescope lsp_type_definitions<cr>", vim.tbl_extend("force", opts, { desc = "Type definition" }))
-          vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover" }))
           vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
           vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
           vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "Line diagnostics" }))
@@ -324,7 +316,7 @@ return {
 
   -- Mason for LSP server management
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = "Mason",
     keys = {
       { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" },
@@ -336,7 +328,7 @@ return {
 
   -- Mason LSP config integration
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = { "vtsls", "eslint", "gopls", "lua_ls" },
@@ -347,23 +339,32 @@ return {
   },
 
   -- Treesitter: syntax highlight/indent สำหรับ TS/TSX + ทำให้ flash `S` ใช้ได้
-  -- master branch = รองรับ Neovim 0.11 (main branch ต้องการ 0.12+)
+  -- main branch: ต้องการ Neovim 0.12+ และ tree-sitter-cli 0.26.1+ (brew install tree-sitter-cli)
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",
-    lazy = false,
+    branch = "main",
+    lazy = false, -- plugin ไม่รองรับ lazy-load
     build = ":TSUpdate",
-    main = "nvim-treesitter.configs",
-    opts = {
-      ensure_installed = {
+    config = function()
+      require("nvim-treesitter").install({
         "typescript", "tsx", "javascript", "jsdoc", "json", "yaml",
         "html", "css", "graphql", "prisma", "dockerfile", "bash", "regex",
         "lua", "luadoc", "vim", "vimdoc", "query", "go",
         "markdown", "markdown_inline",
-      },
-      highlight = { enable = true },
-      indent = { enable = true },
-    },
+      })
+
+      -- main branch ไม่เปิด highlight/indent ให้เอง → start ทุก filetype ที่มี parser
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("UserTreesitter", {}),
+        callback = function(ev)
+          if not pcall(vim.treesitter.start, ev.buf) then return end
+          local lang = vim.treesitter.language.get_lang(vim.bo[ev.buf].filetype)
+          if lang and vim.treesitter.query.get(lang, "indents") then
+            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
+    end,
   },
 
   -- JSX-aware commentstring: gcc ใน JSX ได้ {/* */} (LazyVim standard)

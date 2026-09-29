@@ -29,7 +29,6 @@ if not vim.g.vscode then
   vim.opt.expandtab = true
   vim.opt.tabstop = 2
   vim.opt.shiftwidth = 2
-  vim.opt.autoindent = true
   vim.opt.smartindent = true
   vim.opt.undofile = true
   vim.opt.undolevels = 10000

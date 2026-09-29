@@ -4,7 +4,7 @@ return {
   -- Surround (LazyVim standard)
   -- gsa: add, gsd: delete, gsr: replace
   {
-    "echasnovski/mini.surround",
+    "nvim-mini/mini.surround",
     version = false,
     event = "VeryLazy",
     opts = {
@@ -20,18 +20,11 @@ return {
     },
   },
 
-  -- Comment toggling (LazyVim standard)
-  -- gcc: line, gc: visual
-  {
-    "echasnovski/mini.comment",
-    version = false,
-    event = "VeryLazy",
-    opts = {},
-  },
+  -- Comment: ใช้ gc/gcc native ของ Neovim (0.10+) ไม่ต้องมี plugin
 
   -- Auto pairs (LazyVim standard)
   {
-    "echasnovski/mini.pairs",
+    "nvim-mini/mini.pairs",
     version = false,
     event = "InsertEnter",
     opts = {},

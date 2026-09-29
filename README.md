@@ -7,11 +7,11 @@ Minimal Neovim config with **LazyVim-standard keymaps**, designed for VS Code + 
 ### Prerequisites
 
 ```bash
-# Neovim 0.11+
+# Neovim 0.12+
 brew install neovim
 
-# Standalone: ripgrep/fd (Telescope), tree-sitter CLI + C compiler (parsers)
-brew install ripgrep fd tree-sitter
+# Standalone: ripgrep/fd (Telescope), tree-sitter CLI 0.26.1+ + C compiler (parsers)
+brew install ripgrep fd tree-sitter-cli
 
 # Nerd Font (for standalone icons)
 brew install font-jetbrains-mono-nerd-font
@@ -40,26 +40,25 @@ nvim
 ```
 lua/config/options.lua      Vim options
 lua/config/keymaps.lua      Core keymaps (env-specific)
-lua/plugins/common.lua      Shared plugins (5)
+lua/plugins/common.lua      Shared plugins (4)
 lua/plugins/vscode.lua      VS Code keymaps
 lua/plugins/standalone.lua  Standalone UI + LSP (17)
 ```
 
 ## Plugins
 
-### Common (both environments) - 5 plugins
+### Common (both environments) - 4 plugins
 
 | Plugin | Keys |
 |--------|------|
 | mini.surround | `gsa` add, `gsd` delete, `gsr` replace |
-| mini.comment | `gcc` line, `gc` visual |
 | mini.pairs | auto `()[]{}""` |
 | flash.nvim | `s` jump, `S` treesitter select |
 | nvim-spider | `<A-w>/<A-e>/<A-b>` camelCase-aware |
 
 ### Standalone only - 17 plugins
 
-tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, lazygit, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks, nvim-treesitter (`master` branch for Neovim 0.11), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`)
+tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, lazygit, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks, nvim-treesitter (`main` branch), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`)
 
 Format on save runs prettier only in projects with a prettier config (`.prettierrc*` or `"prettier"` in `package.json`).
 
@@ -75,7 +74,7 @@ Leader: `<Space>`
 | `<leader>q` | Close/Quit |
 | `<C-s>` | Save (all modes) |
 | `<leader>bd` | Delete buffer |
-| `[b` / `]b` | Prev/Next buffer |
+| `[b` / `]b` | Prev/Next buffer (native in standalone) |
 | `<S-h>` / `<S-l>` | Prev/Next buffer (standalone) |
 
 ### Window
@@ -111,7 +110,7 @@ Leader: `<Space>`
 | `gr` | References (Telescope) |
 | `gI` | Go to implementation |
 | `gy` | Type definition |
-| `K` | Hover |
+| `K` | Hover (native) |
 | `<leader>cr` | Rename |
 | `<leader>ca` | Code action |
 | `<leader>cd` | Line diagnostics |
@@ -137,8 +136,8 @@ Leader: `<Space>`
 
 | Key | Action |
 |-----|--------|
-| `gcc` | Toggle line comment |
-| `gc` | Toggle comment (visual) |
+| `gcc` | Toggle line comment (native) |
+| `gc` | Toggle comment (visual, native) |
 | `gsa{motion}{char}` | Add surround |
 | `gsd{char}` | Delete surround |
 | `gsr{old}{new}` | Replace surround |
@@ -146,7 +145,7 @@ Leader: `<Space>`
 | `S` | Flash treesitter |
 | `<A-w>/<A-e>/<A-b>` | camelCase-aware word movement |
 | `gm` | Go to matching bracket |
-| `Y` | Yank to end of line |
+| `Y` | Yank to end of line (native) |
 | `<leader>p` | Paste without overwriting register |
 | `<A-j>` / `<A-k>` | Move lines (standalone) |
 

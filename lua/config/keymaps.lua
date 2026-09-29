@@ -28,8 +28,7 @@ else
 
   -- Buffer management
   vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
-  vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-  vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
+  -- [b / ]b เป็น default ของ Neovim แล้ว
   vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
   vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
   vim.keymap.set("n", "<leader>bD", "<cmd>%bd|e#|bd#<cr>|'\"", { desc = "Delete other buffers" })
@@ -85,7 +84,6 @@ vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines (cursor stays)" })
 
 vim.keymap.set("n", "gm", "%", { desc = "Go to matching bracket" })
 vim.keymap.set("v", "gm", "%", { desc = "Go to matching bracket" })
-vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
 vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without overwriting register" })
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
