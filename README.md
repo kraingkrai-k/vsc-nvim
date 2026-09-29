@@ -156,6 +156,7 @@ Leader: `<Space>`
 | `<leader>ghr` | Reset hunk |
 | `<leader>ghp` | Preview hunk |
 | `<leader>ghb` / `<leader>ghB` | Blame line / buffer (standalone) |
+| (auto) | Inline blame on current line — author, time, message (standalone; toggle `:Gitsigns toggle_current_line_blame`) |
 | `ih` | Hunk text object (standalone) |
 
 ### Test (standalone, Vitest via neotest)

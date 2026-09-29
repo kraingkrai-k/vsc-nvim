@@ -138,6 +138,10 @@ return {
           changedelete = { text = "~" },
           untracked = { text = "┆" },
         },
+        -- ชื่อคนแก้ + เวลา + commit message ท้ายบรรทัดปัจจุบัน (แบบ GitLens)
+        -- ปิดชั่วคราว: :Gitsigns toggle_current_line_blame
+        current_line_blame = true,
+        current_line_blame_opts = { delay = 300 },
         on_attach = function(bufnr)
           local gs = package.loaded.gitsigns
 
