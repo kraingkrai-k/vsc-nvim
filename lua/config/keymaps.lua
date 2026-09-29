@@ -23,16 +23,17 @@ else
   vim.keymap.set({ "n", "i", "x", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
 
   -- Buffer management
-  vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
+  -- Snacks.bufdelete: ลบ buffer โดยไม่ปิด window/ไม่ทำ layout เพี้ยน, ถามก่อนถ้ายังไม่ save (LazyVim standard)
+  vim.keymap.set("n", "<leader>bd", function() Snacks.bufdelete() end, { desc = "Delete buffer" })
   -- [b / ]b เป็น default ของ Neovim แล้ว
   vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
   vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
-  vim.keymap.set("n", "<leader>bo", "<cmd>%bd|e#|bd#<cr>", { desc = "Delete other buffers" })
+  vim.keymap.set("n", "<leader>bo", function() Snacks.bufdelete.other() end, { desc = "Delete other buffers" })
 
   -- Window management (LazyVim standard)
   vim.keymap.set("n", "<leader>|", "<C-w>v", { desc = "Split vertical" })
   vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split horizontal" })
-  vim.keymap.set("n", "<leader>wd", "<C-w>q", { desc = "Delete window" })
+  vim.keymap.set("n", "<leader>wd", "<C-w>c", { desc = "Delete window" }) -- c: ไม่ปิด nvim ถ้าเป็น window สุดท้าย
 
   -- Window navigation
   vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
@@ -49,8 +50,8 @@ else
   vim.keymap.set("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move up" })
   vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move down" })
   vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
-  vim.keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
-  vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
+  vim.keymap.set("x", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
+  vim.keymap.set("x", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
 
   -- Diagnostics: ]d / [d เป็น default ของ Neovim 0.11 แล้ว
 
@@ -71,5 +72,6 @@ end
 -- Exit insert mode without reaching for Esc (home row friendly)
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
 
-vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
-vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+-- "x" ไม่ใช่ "v": "v" รวม select mode ด้วย → พิมพ์ < > ใน snippet placeholder แล้วกลายเป็น indent
+vim.keymap.set("x", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("x", ">", ">gv", { desc = "Indent right and reselect" })

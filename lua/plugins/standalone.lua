@@ -48,8 +48,9 @@ return {
         options = {
           mode = "buffers",
           numbers = "none",
-          close_command = "bdelete! %d",
-          right_mouse_command = "bdelete! %d",
+          -- ไม่ใช้ bdelete! (ทิ้งงานที่ยังไม่ save) → Snacks.bufdelete ถามก่อน
+          close_command = function(n) Snacks.bufdelete(n) end,
+          right_mouse_command = function(n) Snacks.bufdelete(n) end,
           left_mouse_command = "buffer %d",
           separator_style = "thin",
           always_show_bufferline = true,
@@ -199,7 +200,6 @@ return {
       vim.g.lazygit_floating_window_winblend = 0
       vim.g.lazygit_floating_window_scaling_factor = 0.9
       vim.g.lazygit_floating_window_corner_chars = { "╭", "╮", "╰", "╯" }
-      vim.g.lazygit_use_neovim_remote = 1
     end,
   },
 
@@ -235,9 +235,6 @@ return {
           vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
           vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
           vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "Line diagnostics" }))
-          vim.keymap.set({ "n", "v" }, "<leader>cf", function()
-            require("conform").format({ async = true, lsp_format = "fallback" })
-          end, vim.tbl_extend("force", opts, { desc = "Format" }))
 
           -- TypeScript code actions (LazyVim lang.typescript standard)
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -388,6 +385,15 @@ return {
     "stevearc/conform.nvim",
     event = "BufWritePre",
     cmd = "ConformInfo",
+    keys = {
+      -- global (ไม่ผูกกับ LSP) → format json/yaml/markdown/css ได้แม้ไม่มี LSP
+      {
+        "<leader>cf",
+        function() require("conform").format({ async = true, lsp_format = "fallback" }) end,
+        mode = { "n", "x" },
+        desc = "Format",
+      },
+    },
     opts = {
       formatters_by_ft = {
         typescript = { "prettier" },

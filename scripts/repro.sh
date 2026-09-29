@@ -4,6 +4,7 @@
 #   scripts/repro.sh start [file]          start nvim in a pty (default: TSX fixture project)
 #   scripts/repro.sh wait '<expr>' [sec]   poll until vimscript <expr> is truthy (default 15s)
 #   scripts/repro.sh keys <k>... [N] <k>   send keys (vim notation), a bare number = sleep N sec
+#                                          literal "<" must be written <lt> (e.g. 'o<lt>div>')
 #   scripts/repro.sh expr '<expr>'         evaluate vimscript in the repro nvim
 #   scripts/repro.sh lua '<lua expr>'      evaluate a lua expression in the repro nvim
 #   scripts/repro.sh stop                  quit the repro nvim
@@ -97,7 +98,7 @@ cmd_live() {
     local pid cwd started status
     pid=$(nvim --server "$s" --remote-expr 'getpid()' 2>/dev/null) || continue
     cwd=$(nvim --server "$s" --remote-expr 'getcwd()' 2>/dev/null)
-    started=$(date -j -f "%a %b %d %T %Y" "$(ps -o lstart= -p "$pid" | xargs)" +%s 2>/dev/null || echo 0)
+    started=$(LC_ALL=C date -j -f "%a %b %d %T %Y" "$(LC_ALL=C ps -o lstart= -p "$pid" | xargs)" +%s 2>/dev/null || echo 0)
     status="up-to-date"
     ((started < config_mtime)) && status="STALE (restart nvim to load config changes)"
     echo "pid=$pid  cwd=$cwd  $status"

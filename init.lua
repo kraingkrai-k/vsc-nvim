@@ -1,13 +1,17 @@
--- Ultra Simple Neovim Config - VS Code Focused
--- Clean modular structure with no duplication
+-- Neovim config (LazyVim-standard keymaps): standalone terminal + VS Code (vscode-neovim)
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({
-    "git", "clone", "--filter=blob:none", 
-    "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath
+  local out = vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath,
   })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({ { "Failed to clone lazy.nvim:\n", "ErrorMsg" }, { out, "WarningMsg" } }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -31,4 +35,6 @@ else
 end
 
 -- Initialize lazy.nvim with all plugins
-require("lazy").setup(plugins)
+require("lazy").setup(plugins, {
+  rocks = { enabled = false }, -- ไม่มี plugin ไหนใช้ luarocks (กัน checkhealth error เรื่อง hererocks)
+})

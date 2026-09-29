@@ -30,6 +30,7 @@ if not vim.g.vscode then
   vim.opt.tabstop = 2
   vim.opt.shiftwidth = 2
   vim.opt.smartindent = true
+  vim.opt.confirm = true -- :q / <leader>qq ถามก่อน save แทน error E37
   vim.opt.undofile = true
   vim.opt.undolevels = 10000
   vim.opt.smoothscroll = true
