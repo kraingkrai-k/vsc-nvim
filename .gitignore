@@ -4,6 +4,7 @@
 # Neovim
 lazy-lock.json
 plugin/
+.nvimlog
 
 # AI / IDE tools
 CLAUDE.md
@@ -13,3 +14,6 @@ CLAUDE.md
 
 # Personal notes
 cli.md
+
+# Vim motion practice (personal)
+practice/
