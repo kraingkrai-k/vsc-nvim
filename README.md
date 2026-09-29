@@ -155,7 +155,7 @@ Leader: `<Space>`
 | `<leader>ghs` | Stage hunk |
 | `<leader>ghr` | Reset hunk |
 | `<leader>ghp` | Preview hunk |
-| `<leader>ghb` / `<leader>ghB` | Blame line / buffer (standalone) |
+| `<leader>ghb` / `<leader>ghB` | Blame line / buffer (standalone). In the blame panel: `s` show commit, `r` reblame at commit, `R` at parent, `d` diff, `q` close |
 | (auto) | Inline blame on current line — author, time, message (standalone; toggle `:Gitsigns toggle_current_line_blame`) |
 | `ih` | Hunk text object (standalone) |
 

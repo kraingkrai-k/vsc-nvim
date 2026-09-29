@@ -65,6 +65,24 @@ else
 
   -- Clear search highlighting
   vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear hlsearch" })
+
+  -- กด q ปิดหน้าต่างชั่วคราว (blame, help, quickfix, ...) — LazyVim close_with_q
+  vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("UserCloseWithQ", {}),
+    pattern = {
+      "checkhealth", "gitsigns-blame", "grug-far", "help", "lspinfo",
+      "neotest-output", "neotest-output-panel", "neotest-summary", "qf",
+    },
+    callback = function(ev)
+      vim.bo[ev.buf].buflisted = false
+      vim.schedule(function()
+        vim.keymap.set("n", "q", function()
+          vim.cmd("close")
+          pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
+        end, { buf = ev.buf, silent = true, desc = "Quit buffer" })
+      end)
+    end,
+  })
 end
 
 -- ===== Common keymaps (both environments) =====
