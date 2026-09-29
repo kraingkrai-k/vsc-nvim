@@ -34,4 +34,7 @@ if not vim.g.vscode then
   vim.opt.undofile = true
   vim.opt.undolevels = 10000
   vim.opt.smoothscroll = true
+  -- :grep ใช้ rg แบบเคารพ .gitignore (default ของ 0.11 คือ -uu ซึ่งค้นใน node_modules ด้วย)
+  vim.opt.grepprg = "rg --vimgrep --smart-case"
+  vim.opt.grepformat = "%f:%l:%c:%m"
 end

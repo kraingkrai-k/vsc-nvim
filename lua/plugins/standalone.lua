@@ -99,6 +99,14 @@ return {
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent files" },
+      -- Search (LazyVim standard)
+      { "<leader>/", "<cmd>Telescope live_grep<cr>", desc = "Grep" },
+      { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Grep" },
+      { "<leader>sw", "<cmd>Telescope grep_string word_match=-w<cr>", desc = "Word under cursor" },
+      { "<leader>sw", "<cmd>Telescope grep_string<cr>", mode = "v", desc = "Selection" },
+      { "<leader>sR", "<cmd>Telescope resume<cr>", desc = "Resume last search" },
+      { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Symbols (file)" },
+      { "<leader>sS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Symbols (project)" },
     },
     config = function()
       require("telescope").setup({
@@ -154,13 +162,13 @@ return {
           -- Navigation
           map("n", "]c", function()
             if vim.wo.diff then return "]c" end
-            vim.schedule(function() gs.next_hunk() end)
+            vim.schedule(function() gs.nav_hunk("next") end)
             return "<Ignore>"
           end, { expr = true, desc = "Next hunk" })
 
           map("n", "[c", function()
             if vim.wo.diff then return "[c" end
-            vim.schedule(function() gs.prev_hunk() end)
+            vim.schedule(function() gs.nav_hunk("prev") end)
             return "<Ignore>"
           end, { expr = true, desc = "Prev hunk" })
 
@@ -174,6 +182,8 @@ return {
           map("n", "<leader>hb", function() gs.blame_line({ full = true }) end, { desc = "Blame line" })
           map("n", "<leader>hd", gs.diffthis, { desc = "Diff this" })
           map("n", "<leader>hD", function() gs.diffthis("~") end, { desc = "Diff this ~" })
+          map("n", "<leader>gb", function() gs.blame_line({ full = true }) end, { desc = "Git blame" })
+          map("n", "<leader>gd", gs.diffthis, { desc = "Git diff" })
 
           -- Text object
           map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
@@ -213,8 +223,16 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "saghen/blink.cmp", -- ต้องโหลดก่อน LSP start เพื่อส่ง completion capabilities
     },
     config = function()
+      -- Diagnostics: Neovim 0.11 ปิด virtual_text เป็น default → เปิดให้เห็น error ท้ายบรรทัด
+      vim.diagnostic.config({
+        virtual_text = { spacing = 4, source = "if_many", prefix = "●" },
+        severity_sort = true,
+        float = { border = "rounded", source = "if_many" },
+      })
+
       -- LSP keymaps (LazyVim standard)
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -223,66 +241,62 @@ return {
 
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Go to declaration" }))
-          vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", vim.tbl_extend("force", opts, { desc = "References" }))
+          -- nowait: 0.11 มี grn/grr/gra/gri เป็น default → ไม่งั้น gr ต้องรอ timeoutlen
+          vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>", vim.tbl_extend("force", opts, { desc = "References", nowait = true }))
           vim.keymap.set("n", "gI", "<cmd>Telescope lsp_implementations<cr>", vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
           vim.keymap.set("n", "gy", "<cmd>Telescope lsp_type_definitions<cr>", vim.tbl_extend("force", opts, { desc = "Type definition" }))
           vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover" }))
           vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
           vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
           vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, vim.tbl_extend("force", opts, { desc = "Line diagnostics" }))
-          vim.keymap.set("n", "<leader>cf", function() vim.lsp.buf.format({ async = true }) end, vim.tbl_extend("force", opts, { desc = "Format" }))
+          vim.keymap.set({ "n", "v" }, "<leader>cf", function()
+            require("conform").format({ async = true, lsp_format = "fallback" })
+          end, vim.tbl_extend("force", opts, { desc = "Format" }))
+
+          -- TypeScript code actions (LazyVim lang.typescript standard)
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client and client.name == "vtsls" then
+            local function action(kind)
+              return function()
+                vim.lsp.buf.code_action({ apply = true, context = { only = { kind }, diagnostics = {} } })
+              end
+            end
+            vim.keymap.set("n", "<leader>co", action("source.organizeImports"), vim.tbl_extend("force", opts, { desc = "Organize imports" }))
+            vim.keymap.set("n", "<leader>cM", action("source.addMissingImports.ts"), vim.tbl_extend("force", opts, { desc = "Add missing imports" }))
+            vim.keymap.set("n", "<leader>cu", action("source.removeUnused.ts"), vim.tbl_extend("force", opts, { desc = "Remove unused imports" }))
+          end
         end,
       })
 
-      -- LSP server configuration
-      if vim.lsp.config then
-        -- Neovim 0.11+ API
-        vim.lsp.config.ts_ls = {
-          cmd = { "typescript-language-server", "--stdio" },
-          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-          root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
-        }
+      vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities() })
 
-        vim.lsp.config.gopls = {
-          cmd = { "gopls" },
-          filetypes = { "go", "gomod", "gowork", "gotmpl" },
-          root_markers = { "go.work", "go.mod", ".git" },
-        }
-
-        vim.lsp.config.lua_ls = {
-          cmd = { "lua-language-server" },
-          filetypes = { "lua" },
-          root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" },
-          settings = {
-            Lua = {
-              diagnostics = { globals = { "vim" } },
-              workspace = { checkThirdParty = false },
-            },
+      -- Server configs: merge กับ defaults ของ nvim-lspconfig (lsp/*.lua) ไม่ต้องเขียน cmd/root_markers เอง
+      vim.lsp.config("vtsls", {
+        settings = {
+          complete_function_calls = true,
+          vtsls = {
+            autoUseWorkspaceTsdk = true, -- ใช้ typescript version ของ project (node_modules)
+            enableMoveToFileCodeAction = true,
+            experimental = { completion = { enableServerSideFuzzyMatch = true } },
           },
-        }
-
-        vim.lsp.enable("ts_ls")
-        vim.lsp.enable("gopls")
-        vim.lsp.enable("lua_ls")
-      else
-        -- Fallback for Neovim < 0.11
-        local lspconfig = require("lspconfig")
-        local servers = {
-          ts_ls = {},
-          gopls = {},
-          lua_ls = {
-            settings = {
-              Lua = {
-                diagnostics = { globals = { "vim" } },
-                workspace = { checkThirdParty = false },
-              },
-            },
+          typescript = {
+            updateImportsOnFileMove = { enabled = "always" },
+            suggest = { completeFunctionCalls = true },
           },
-        }
-        for server, config in pairs(servers) do
-          lspconfig[server].setup(config)
-        end
-      end
+        },
+      })
+
+      vim.lsp.config("lua_ls", {
+        settings = {
+          Lua = {
+            diagnostics = { globals = { "vim" } },
+            workspace = { checkThirdParty = false },
+          },
+        },
+      })
+
+      -- eslint: attach เฉพาะ project ที่มี eslint config, ใช้ eslint ใน node_modules ของ project
+      vim.lsp.enable({ "vtsls", "eslint", "gopls", "lua_ls" })
     end,
   },
 
@@ -325,9 +339,81 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "gopls", "lua_ls" },
-        automatic_installation = true,
+        ensure_installed = { "vtsls", "eslint", "gopls", "lua_ls" },
+        -- enable เองใน nvim-lspconfig ด้านบน (กัน ts_ls ที่ยังติดตั้งอยู่ attach ซ้อนกับ vtsls)
+        automatic_enable = false,
       })
     end,
+  },
+
+  -- Treesitter: syntax highlight/indent สำหรับ TS/TSX + ทำให้ flash `S` ใช้ได้
+  -- master branch = รองรับ Neovim 0.11 (main branch ต้องการ 0.12+)
+  {
+    "nvim-treesitter/nvim-treesitter",
+    branch = "master",
+    lazy = false,
+    build = ":TSUpdate",
+    main = "nvim-treesitter.configs",
+    opts = {
+      ensure_installed = {
+        "typescript", "tsx", "javascript", "jsdoc", "json", "yaml",
+        "html", "css", "graphql", "prisma", "dockerfile", "bash", "regex",
+        "lua", "luadoc", "vim", "vimdoc", "query", "go",
+        "markdown", "markdown_inline",
+      },
+      highlight = { enable = true },
+      indent = { enable = true },
+    },
+  },
+
+  -- JSX-aware commentstring: gcc ใน JSX ได้ {/* */} (LazyVim standard)
+  {
+    "folke/ts-comments.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+
+  -- Completion (LazyVim default)
+  {
+    "saghen/blink.cmp",
+    version = "1.*",
+    event = { "InsertEnter", "CmdlineEnter" },
+    opts = {
+      keymap = { preset = "enter" }, -- <CR> accept, <C-n>/<C-p> เลือก, <C-space> เปิดเมนู
+      completion = {
+        documentation = { auto_show = true, auto_show_delay_ms = 200 },
+      },
+      signature = { enabled = true },
+      sources = { default = { "lsp", "path", "snippets", "buffer" } },
+    },
+  },
+
+  -- Formatter: prettier จาก node_modules ของ project
+  {
+    "stevearc/conform.nvim",
+    event = "BufWritePre",
+    cmd = "ConformInfo",
+    opts = {
+      formatters_by_ft = {
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        javascript = { "prettier" },
+        javascriptreact = { "prettier" },
+        json = { "prettier" },
+        jsonc = { "prettier" },
+        yaml = { "prettier" },
+        css = { "prettier" },
+        scss = { "prettier" },
+        html = { "prettier" },
+        markdown = { "prettier" },
+        graphql = { "prettier" },
+      },
+      formatters = {
+        -- run เฉพาะ project ที่มี prettier config (ไม่ไป format repo ที่ไม่ได้ใช้ prettier)
+        prettier = { require_cwd = true },
+      },
+      -- format on save ด้วย prettier เท่านั้น (ไม่ fallback ไป LSP ตอน save)
+      format_on_save = { timeout_ms = 3000, lsp_format = "never" },
+    },
   },
 }

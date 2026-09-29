@@ -57,9 +57,7 @@ else
   vim.keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
   vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
 
-  -- Diagnostics
-  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
+  -- Diagnostics: ]d / [d เป็น default ของ Neovim 0.11 แล้ว
 
   -- Quit all & Lazy (LazyVim standard)
   vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })

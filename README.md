@@ -7,8 +7,11 @@ Minimal Neovim config with **LazyVim-standard keymaps**, designed for VS Code + 
 ### Prerequisites
 
 ```bash
-# Neovim 0.10+
+# Neovim 0.11+
 brew install neovim
+
+# Standalone: ripgrep/fd (Telescope), tree-sitter CLI + C compiler (parsers)
+brew install ripgrep fd tree-sitter
 
 # Nerd Font (for standalone icons)
 brew install font-jetbrains-mono-nerd-font
@@ -39,7 +42,7 @@ lua/config/options.lua      Vim options
 lua/config/keymaps.lua      Core keymaps (env-specific)
 lua/plugins/common.lua      Shared plugins (5)
 lua/plugins/vscode.lua      VS Code keymaps
-lua/plugins/standalone.lua  Standalone UI + LSP (11)
+lua/plugins/standalone.lua  Standalone UI + LSP (17)
 ```
 
 ## Plugins
@@ -52,11 +55,13 @@ lua/plugins/standalone.lua  Standalone UI + LSP (11)
 | mini.comment | `gcc` line, `gc` visual |
 | mini.pairs | auto `()[]{}""` |
 | flash.nvim | `s` jump, `S` treesitter select |
-| nvim-spider | `w/e/b` camelCase-aware |
+| nvim-spider | `<A-w>/<A-e>/<A-b>` camelCase-aware |
 
-### Standalone only - 11 plugins
+### Standalone only - 17 plugins
 
-tokyonight, lualine, bufferline, nvim-tree, telescope, gitsigns, which-key, lazygit, nvim-lspconfig, mason, mason-lspconfig
+tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, lazygit, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks, nvim-treesitter (`master` branch for Neovim 0.11), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`)
+
+Format on save runs prettier only in projects with a prettier config (`.prettierrc*` or `"prettier"` in `package.json`).
 
 ## Keymaps
 
@@ -91,6 +96,11 @@ Leader: `<Space>`
 | `<leader>fb` | Buffers |
 | `<leader>fr` | Recent files |
 | `<leader>e` | File explorer |
+| `<leader>/` / `<leader>sg` | Grep (standalone) |
+| `<leader>sw` | Grep word under cursor / selection (standalone) |
+| `<leader>sR` | Resume last search (standalone) |
+| `<leader>ss` | Symbols in file (standalone) |
+| `<leader>sS` | Symbols in project |
 
 ### LSP
 
@@ -98,14 +108,17 @@ Leader: `<Space>`
 |-----|--------|
 | `gd` | Go to definition |
 | `gD` | Go to declaration |
-| `gr` | References |
+| `gr` | References (Telescope) |
 | `gI` | Go to implementation |
 | `gy` | Type definition |
 | `K` | Hover |
 | `<leader>cr` | Rename |
 | `<leader>ca` | Code action |
 | `<leader>cd` | Line diagnostics |
-| `<leader>cf` | Format |
+| `<leader>cf` | Format (prettier, fallback LSP) |
+| `<leader>co` | Organize imports (vtsls) |
+| `<leader>cM` | Add missing imports (vtsls) |
+| `<leader>cu` | Remove unused imports (vtsls) |
 | `]d` / `[d` | Next/Prev diagnostic |
 
 ### Git
@@ -131,7 +144,7 @@ Leader: `<Space>`
 | `gsr{old}{new}` | Replace surround |
 | `s` + 2 chars | Flash jump |
 | `S` | Flash treesitter |
-| `w/e/b` | Smart word movement |
+| `<A-w>/<A-e>/<A-b>` | camelCase-aware word movement |
 | `gm` | Go to matching bracket |
 | `Y` | Yank to end of line |
 | `<leader>p` | Paste without overwriting register |
@@ -145,7 +158,7 @@ Leader: `<Space>`
 | `<leader>z` | Zen mode |
 | `gp` | Peek definition |
 | `<leader><leader>` | Toggle recent file |
-| `<leader>o` | Go to symbol |
+| `<leader>o` | Go to symbol (file) |
 
 ### Useful Vim Built-ins
 
@@ -167,6 +180,14 @@ f/F{char}           Find char forward/backward
 :checkhealth        " Health diagnostics
 ```
 
+Reproduce issues in a real pty (headless skips `VeryLazy`, so which-key etc. never load):
+
+```bash
+scripts/repro.sh live                   # running sessions; STALE = restart nvim to pick up config changes
+scripts/repro.sh start && scripts/repro.sh keys '<Space>' 1 sg 2 && scripts/repro.sh expr '&filetype'
+scripts/repro.sh stop                   # see header of scripts/repro.sh for all commands
+```
+
 Clear cache if needed:
 
 ```bash
@@ -176,6 +197,7 @@ rm -rf ~/.cache/nvim/
 
 ## LSP Servers (auto-installed via Mason)
 
-- TypeScript/JavaScript (`ts_ls`)
+- TypeScript/JavaScript (`vtsls`)
+- ESLint (`eslint`, attaches only in projects with an eslint config)
 - Go (`gopls`)
 - Lua (`lua_ls`)
