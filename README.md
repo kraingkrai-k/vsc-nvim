@@ -10,12 +10,32 @@ Minimal Neovim config with **LazyVim-standard keymaps**, designed for VS Code + 
 # Neovim 0.12+
 brew install neovim
 
-# Standalone: ripgrep/fd (Telescope), tree-sitter CLI 0.26.1+ + C compiler (parsers)
-brew install ripgrep fd tree-sitter-cli
+# C compiler + make (treesitter parsers, telescope-fzf-native)
+xcode-select --install
+
+# Standalone: ripgrep/fd (Telescope), tree-sitter CLI 0.26.1+ (parsers), lazygit (<leader>gg)
+brew install ripgrep fd tree-sitter-cli lazygit
+
+# Node.js — Mason installs vtsls / eslint via npm
+brew install node   # or nvm
 
 # Nerd Font (for standalone icons)
 brew install font-jetbrains-mono-nerd-font
+
+# Optional: mermaid diagrams in markdown (snacks.image, needs a Kitty-graphics terminal e.g. Ghostty/Kitty/WezTerm)
+npm install -g @mermaid-js/mermaid-cli && brew install imagemagick
 ```
+
+### Upgrading from Neovim 0.11
+
+```bash
+brew upgrade neovim
+brew install tree-sitter-cli              # the `tree-sitter` formula no longer ships the CLI
+rm -rf ~/.local/share/nvim/lazy/nvim-treesitter   # old master-branch parsers (incompatible ABI)
+nvim "+Lazy! sync" +qa                    # re-clone on main branch; parsers install on next start
+```
+
+Then check `:checkhealth nvim-treesitter` and `:checkhealth vim.deprecated`.
 
 ### Installation
 
