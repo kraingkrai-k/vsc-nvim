@@ -115,12 +115,6 @@ return {
           selection_caret = " ",
           -- fd/rg เคารพ .gitignore อยู่แล้ว (node_modules, dist, ...) → กันแค่ .git/ ที่โผล่เพราะ hidden = true
           file_ignore_patterns = { "^%.git/", "/%.git/" },
-          mappings = {
-            i = {
-              ["<C-j>"] = "move_selection_next",
-              ["<C-k>"] = "move_selection_previous",
-            },
-          },
         },
         pickers = {
           find_files = { hidden = true },
@@ -152,29 +146,29 @@ return {
             vim.keymap.set(mode, l, r, opts)
           end
 
-          -- Navigation
-          map("n", "]c", function()
-            if vim.wo.diff then return "]c" end
-            vim.schedule(function() gs.nav_hunk("next") end)
-            return "<Ignore>"
-          end, { expr = true, desc = "Next hunk" })
+          -- Navigation (LazyVim standard: ]h/[h — ]c/[c ใช้กับ class ของ treesitter-textobjects)
+          map("n", "]h", function()
+            if vim.wo.diff then return vim.cmd.normal({ "]c", bang = true }) end
+            gs.nav_hunk("next")
+          end, { desc = "Next hunk" })
+          map("n", "[h", function()
+            if vim.wo.diff then return vim.cmd.normal({ "[c", bang = true }) end
+            gs.nav_hunk("prev")
+          end, { desc = "Prev hunk" })
+          map("n", "]H", function() gs.nav_hunk("last") end, { desc = "Last hunk" })
+          map("n", "[H", function() gs.nav_hunk("first") end, { desc = "First hunk" })
 
-          map("n", "[c", function()
-            if vim.wo.diff then return "[c" end
-            vim.schedule(function() gs.nav_hunk("prev") end)
-            return "<Ignore>"
-          end, { expr = true, desc = "Prev hunk" })
-
-          -- Actions
-          map("n", "<leader>hs", gs.stage_hunk, { desc = "Stage hunk" })
-          map("n", "<leader>hr", gs.reset_hunk, { desc = "Reset hunk" })
-          map("n", "<leader>hS", gs.stage_buffer, { desc = "Stage buffer" })
-          map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
-          map("n", "<leader>hR", gs.reset_buffer, { desc = "Reset buffer" })
-          map("n", "<leader>hp", gs.preview_hunk, { desc = "Preview hunk" })
-          map("n", "<leader>hb", function() gs.blame_line({ full = true }) end, { desc = "Blame line" })
-          map("n", "<leader>hd", gs.diffthis, { desc = "Diff this" })
-          map("n", "<leader>hD", function() gs.diffthis("~") end, { desc = "Diff this ~" })
+          -- Actions (LazyVim standard: <leader>gh*)
+          map({ "n", "x" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", { desc = "Stage hunk" })
+          map({ "n", "x" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", { desc = "Reset hunk" })
+          map("n", "<leader>ghS", gs.stage_buffer, { desc = "Stage buffer" })
+          map("n", "<leader>ghu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+          map("n", "<leader>ghR", gs.reset_buffer, { desc = "Reset buffer" })
+          map("n", "<leader>ghp", gs.preview_hunk_inline, { desc = "Preview hunk inline" })
+          map("n", "<leader>ghb", function() gs.blame_line({ full = true }) end, { desc = "Blame line" })
+          map("n", "<leader>ghB", function() gs.blame() end, { desc = "Blame buffer" })
+          map("n", "<leader>ghd", gs.diffthis, { desc = "Diff this" })
+          map("n", "<leader>ghD", function() gs.diffthis("~") end, { desc = "Diff this ~" })
           map("n", "<leader>gb", function() gs.blame_line({ full = true }) end, { desc = "Git blame" })
           map("n", "<leader>gd", gs.diffthis, { desc = "Git diff" })
 
@@ -415,6 +409,141 @@ return {
       },
       -- format on save ด้วย prettier เท่านั้น (ไม่ fallback ไป LSP ตอน save)
       format_on_save = { timeout_ms = 3000, lsp_format = "never" },
+    },
+  },
+
+  -- Auto close/rename JSX tags (LazyVim default)
+  {
+    "windwp/nvim-ts-autotag",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {},
+  },
+
+  -- Treesitter text objects + motions (LazyVim default): ]f/[f function, ]c/[c class, ]a/[a argument
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    event = "VeryLazy",
+    config = function()
+      require("nvim-treesitter-textobjects").setup({ move = { set_jumps = true } })
+      local moves = {
+        goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
+        goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
+        goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
+        goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
+      }
+      local function attach(buf)
+        local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+        if not (lang and vim.treesitter.query.get(lang, "textobjects")) then return end
+        for method, keymaps in pairs(moves) do
+          for key, query in pairs(keymaps) do
+            vim.keymap.set({ "n", "x", "o" }, key, function()
+              -- diff mode: ]c/[c คือ next/prev change แบบ native
+              if vim.wo.diff and key:find("[cC]") then return vim.cmd("normal! " .. key) end
+              require("nvim-treesitter-textobjects.move")[method](query, "textobjects")
+            end, { buf = buf, silent = true, desc = method:gsub("_", " ") .. " " .. query })
+          end
+        end
+      end
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("UserTextobjects", {}),
+        callback = function(ev) attach(ev.buf) end,
+      })
+      vim.tbl_map(attach, vim.api.nvim_list_bufs())
+    end,
+  },
+
+  -- Extra text objects (LazyVim default): af/if function, ac/ic class, aa/ia argument, at/it tag, ...
+  {
+    "nvim-mini/mini.ai",
+    event = "VeryLazy",
+    opts = function()
+      local ai = require("mini.ai")
+      return {
+        n_lines = 500,
+        custom_textobjects = {
+          o = ai.gen_spec.treesitter({ -- code block
+            a = { "@block.outer", "@conditional.outer", "@loop.outer" },
+            i = { "@block.inner", "@conditional.inner", "@loop.inner" },
+          }),
+          f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }), -- function
+          c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }), -- class
+          t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" }, -- tags
+          d = { "%f[%d]%d+" }, -- digits
+          e = { -- word with case (camelCase parts)
+            { "%u[%l%d]+%f[^%l%d]", "%f[%S][%l%d]+%f[^%l%d]", "%f[%P][%l%d]+%f[^%l%d]", "^[%l%d]+%f[^%l%d]" },
+            "^().*()$",
+          },
+          u = ai.gen_spec.function_call(), -- function call ("usage")
+          U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
+        },
+      }
+    end,
+  },
+
+  -- Search & replace ทั้ง project (LazyVim default)
+  {
+    "MagicDuck/grug-far.nvim",
+    cmd = { "GrugFar", "GrugFarWithin" },
+    opts = { headerMaxWidth = 80 },
+    keys = {
+      {
+        "<leader>sr",
+        function()
+          local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+          require("grug-far").open({
+            transient = true,
+            prefills = { filesFilter = ext and ext ~= "" and "*." .. ext or nil },
+          })
+        end,
+        mode = { "n", "x" },
+        desc = "Search and Replace",
+      },
+    },
+  },
+
+  -- Diagnostics / quickfix list (LazyVim default)
+  {
+    "folke/trouble.nvim",
+    cmd = "Trouble",
+    opts = {},
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
+      { "<leader>cs", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
+      { "<leader>cS", "<cmd>Trouble lsp toggle<cr>", desc = "LSP references/definitions/... (Trouble)" },
+      { "<leader>xL", "<cmd>Trouble loclist toggle<cr>", desc = "Location List (Trouble)" },
+      { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
+    },
+  },
+
+  -- Test runner: Vitest (LazyVim test.core keys) — rstest ยังไม่มี neotest adapter
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "marilari88/neotest-vitest",
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = { require("neotest-vitest") },
+        status = { virtual_text = true },
+        output = { open_on_run = true },
+      })
+    end,
+    keys = {
+      { "<leader>t", "", desc = "+test" },
+      { "<leader>ta", function() require("neotest").run.attach() end, desc = "Attach to Test (Neotest)" },
+      { "<leader>tt", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Run File (Neotest)" },
+      { "<leader>tT", function() require("neotest").run.run(vim.uv.cwd()) end, desc = "Run All Test Files (Neotest)" },
+      { "<leader>tr", function() require("neotest").run.run() end, desc = "Run Nearest (Neotest)" },
+      { "<leader>tl", function() require("neotest").run.run_last() end, desc = "Run Last (Neotest)" },
+      { "<leader>ts", function() require("neotest").summary.toggle() end, desc = "Toggle Summary (Neotest)" },
+      { "<leader>to", function() require("neotest").output.open({ enter = true, auto_close = true }) end, desc = "Show Output (Neotest)" },
+      { "<leader>tO", function() require("neotest").output_panel.toggle() end, desc = "Toggle Output Panel (Neotest)" },
+      { "<leader>tS", function() require("neotest").run.stop() end, desc = "Stop (Neotest)" },
+      { "<leader>tw", function() require("neotest").watch.toggle(vim.fn.expand("%")) end, desc = "Toggle Watch (Neotest)" },
     },
   },
 }

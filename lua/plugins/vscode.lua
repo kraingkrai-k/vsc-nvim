@@ -23,12 +23,12 @@ end, { desc = "Git (SCM)" })
 vim.keymap.set("n", "<leader>gd", function() vscode.action("git.openChange") end, { desc = "Git diff" })
 vim.keymap.set("n", "<leader>gb", function() vscode.action("gitlens.toggleFileBlame") end, { desc = "Git blame" })
 
--- Git hunks
-vim.keymap.set("n", "]c", function() vscode.action("workbench.action.editor.nextChange") end, { desc = "Next hunk" })
-vim.keymap.set("n", "[c", function() vscode.action("workbench.action.editor.previousChange") end, { desc = "Prev hunk" })
-vim.keymap.set("n", "<leader>hs", function() vscode.action("git.stageSelectedRanges") end, { desc = "Stage hunk" })
-vim.keymap.set("n", "<leader>hr", function() vscode.action("git.revertSelectedRanges") end, { desc = "Reset hunk" })
-vim.keymap.set("n", "<leader>hp", function() vscode.action("editor.action.dirtydiff.previous") end, { desc = "Preview hunk" })
+-- Git hunks (LazyVim standard: ]h/[h, <leader>gh*)
+vim.keymap.set("n", "]h", function() vscode.action("workbench.action.editor.nextChange") end, { desc = "Next hunk" })
+vim.keymap.set("n", "[h", function() vscode.action("workbench.action.editor.previousChange") end, { desc = "Prev hunk" })
+vim.keymap.set("n", "<leader>ghs", function() vscode.action("git.stageSelectedRanges") end, { desc = "Stage hunk" })
+vim.keymap.set("n", "<leader>ghr", function() vscode.action("git.revertSelectedRanges") end, { desc = "Reset hunk" })
+vim.keymap.set("n", "<leader>ghp", function() vscode.action("editor.action.dirtydiff.next") end, { desc = "Preview hunk" })
 
 -- Window management (LazyVim standard)
 vim.keymap.set("n", "<leader>|", function() vscode.action("workbench.action.splitEditorRight") end, { desc = "Split vertical" })
@@ -45,7 +45,7 @@ vim.keymap.set("n", "<C-k>", function() vscode.action("workbench.action.focusAbo
 vim.keymap.set("n", "<leader>cr", function() vscode.action("editor.action.rename") end, { desc = "Rename" })
 vim.keymap.set("n", "<leader>ca", function() vscode.action("editor.action.quickFix") end, { desc = "Code action" })
 vim.keymap.set("n", "<leader>cf", function() vscode.action("editor.action.formatDocument") end, { desc = "Format" })
-vim.keymap.set("n", "<leader>cd", function() vscode.action("editor.action.marker.next") end, { desc = "Line diagnostics" })
+vim.keymap.set("n", "<leader>cd", function() vscode.action("editor.action.showHover") end, { desc = "Line diagnostics" })
 
 -- VS Code unique features
 vim.keymap.set("n", "<leader>fp", function() vscode.action("projectManager.listProjects") end, { desc = "Projects" })

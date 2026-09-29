@@ -5,8 +5,6 @@ if vim.g.vscode then
   local vscode = require("vscode")
 
   -- File operations
-  vim.keymap.set("n", "<leader>w", function() vscode.action("workbench.action.files.save") end, { desc = "Save" })
-  vim.keymap.set("n", "<leader>q", function() vscode.action("workbench.action.closeActiveEditor") end, { desc = "Close" })
   vim.keymap.set({ "n", "i", "v" }, "<C-s>", function() vscode.action("workbench.action.files.save") end, { desc = "Save" })
 
   -- Buffer management
@@ -22,16 +20,14 @@ else
   -- ===== STANDALONE =====
 
   -- File operations
-  vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
-  vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
-  vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
+  vim.keymap.set({ "n", "i", "x", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save" })
 
   -- Buffer management
   vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
   -- [b / ]b เป็น default ของ Neovim แล้ว
   vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
   vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
-  vim.keymap.set("n", "<leader>bD", "<cmd>%bd|e#|bd#<cr>|'\"", { desc = "Delete other buffers" })
+  vim.keymap.set("n", "<leader>bo", "<cmd>%bd|e#|bd#<cr>", { desc = "Delete other buffers" })
 
   -- Window management (LazyVim standard)
   vim.keymap.set("n", "<leader>|", "<C-w>v", { desc = "Split vertical" })
@@ -62,13 +58,9 @@ else
   vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
   vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
-  -- Centered scroll (ไม่หลงทางเมื่อ scroll)
-  vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down centered" })
-  vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up centered" })
-
-  -- Centered search (cursor อยู่กลางจอเสมอเมื่อ search)
-  vim.keymap.set("n", "n", "nzzzv", { desc = "Next search centered" })
-  vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev search centered" })
+  -- n/N: ไปข้างหน้า/ถอยหลังเสมอ ไม่ว่าจะค้นด้วย / หรือ ? (LazyVim standard)
+  vim.keymap.set({ "n", "x", "o" }, "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next search result" })
+  vim.keymap.set({ "n", "x", "o" }, "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev search result" })
 
   -- Clear search highlighting
   vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear hlsearch" })
@@ -79,11 +71,5 @@ end
 -- Exit insert mode without reaching for Esc (home row friendly)
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
 
--- Join lines without cursor jumping (LazyVim standard)
-vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines (cursor stays)" })
-
-vim.keymap.set("n", "gm", "%", { desc = "Go to matching bracket" })
-vim.keymap.set("v", "gm", "%", { desc = "Go to matching bracket" })
-vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without overwriting register" })
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })

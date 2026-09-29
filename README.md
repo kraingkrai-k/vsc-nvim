@@ -42,7 +42,7 @@ lua/config/options.lua      Vim options
 lua/config/keymaps.lua      Core keymaps (env-specific)
 lua/plugins/common.lua      Shared plugins (4)
 lua/plugins/vscode.lua      VS Code keymaps
-lua/plugins/standalone.lua  Standalone UI + LSP (17)
+lua/plugins/standalone.lua  Standalone UI + LSP (23)
 ```
 
 ## Plugins
@@ -56,9 +56,9 @@ lua/plugins/standalone.lua  Standalone UI + LSP (17)
 | flash.nvim | `s` jump, `S` treesitter select |
 | nvim-spider | `<A-w>/<A-e>/<A-b>` camelCase-aware |
 
-### Standalone only - 17 plugins
+### Standalone only - 23 plugins
 
-tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, lazygit, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks, nvim-treesitter (`main` branch), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`)
+tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, lazygit, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks, nvim-treesitter (`main` branch), nvim-treesitter-textobjects, mini.ai, nvim-ts-autotag (JSX tags), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`), grug-far (search & replace), trouble (diagnostics list), neotest + neotest-vitest (Vitest runner)
 
 Format on save runs prettier only in projects with a prettier config (`.prettierrc*` or `"prettier"` in `package.json`).
 
@@ -70,12 +70,12 @@ Leader: `<Space>`
 
 | Key | Action |
 |-----|--------|
-| `<leader>w` | Save |
-| `<leader>q` | Close/Quit |
 | `<C-s>` | Save (all modes) |
 | `<leader>bd` | Delete buffer |
 | `[b` / `]b` | Prev/Next buffer (native in standalone) |
 | `<S-h>` / `<S-l>` | Prev/Next buffer (standalone) |
+| `<leader>bo` | Delete other buffers (standalone) |
+| `<leader>qq` | Quit all (standalone) |
 
 ### Window
 
@@ -100,6 +100,7 @@ Leader: `<Space>`
 | `<leader>sR` | Resume last search (standalone) |
 | `<leader>ss` | Symbols in file (standalone) |
 | `<leader>sS` | Symbols in project |
+| `<leader>sr` | Search & replace in project — grug-far (standalone) |
 
 ### LSP
 
@@ -119,6 +120,9 @@ Leader: `<Space>`
 | `<leader>cM` | Add missing imports (vtsls) |
 | `<leader>cu` | Remove unused imports (vtsls) |
 | `]d` / `[d` | Next/Prev diagnostic |
+| `<leader>xx` / `<leader>xX` | Diagnostics project / buffer — Trouble (standalone) |
+| `<leader>xQ` / `<leader>xL` | Quickfix / location list — Trouble (standalone) |
+| `<leader>cs` / `<leader>cS` | Symbols / LSP refs — Trouble (standalone) |
 
 ### Git
 
@@ -127,10 +131,25 @@ Leader: `<Space>`
 | `<leader>gg` | LazyGit / SCM |
 | `<leader>gd` | Git diff |
 | `<leader>gb` | Git blame |
-| `]c` / `[c` | Next/Prev hunk |
-| `<leader>hs` | Stage hunk |
-| `<leader>hr` | Reset hunk |
-| `<leader>hp` | Preview hunk |
+| `]h` / `[h` | Next/Prev hunk |
+| `<leader>ghs` | Stage hunk |
+| `<leader>ghr` | Reset hunk |
+| `<leader>ghp` | Preview hunk |
+| `<leader>ghb` / `<leader>ghB` | Blame line / buffer (standalone) |
+| `ih` | Hunk text object (standalone) |
+
+### Test (standalone, Vitest via neotest)
+
+| Key | Action |
+|-----|--------|
+| `<leader>tt` | Run file |
+| `<leader>tr` | Run nearest |
+| `<leader>tT` | Run all test files |
+| `<leader>tl` | Run last |
+| `<leader>ts` | Toggle summary |
+| `<leader>to` / `<leader>tO` | Output / output panel |
+| `<leader>tw` | Toggle watch |
+| `<leader>tS` | Stop |
 
 ### Editing
 
@@ -144,10 +163,13 @@ Leader: `<Space>`
 | `s` + 2 chars | Flash jump |
 | `S` | Flash treesitter |
 | `<A-w>/<A-e>/<A-b>` | camelCase-aware word movement |
-| `gm` | Go to matching bracket |
+| `%` | Go to matching bracket (native) |
 | `Y` | Yank to end of line (native) |
-| `<leader>p` | Paste without overwriting register |
+| `P` (visual) | Paste without overwriting register (native) |
 | `<A-j>` / `<A-k>` | Move lines (standalone) |
+| `n` / `N` | Always forward / backward search (standalone) |
+| `af`/`if`, `ac`/`ic`, `aa`/`ia`, `at`/`it`, `ao`/`io`, `au`/`iu` | Function, class, argument, tag, block, call text objects — mini.ai (standalone) |
+| `]f`/`[f`, `]c`/`[c`, `]a`/`[a` | Next/Prev function, class, argument — treesitter-textobjects (standalone) |
 
 ### VS Code Only
 
