@@ -66,6 +66,14 @@ else
   -- Clear search highlighting
   vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear hlsearch" })
 
+  -- โหลดไฟล์ใหม่เมื่อถูกแก้จากข้างนอก (Claude tab อื่น, git checkout) ตอนกลับมาที่ nvim — LazyVim checktime
+  vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+    group = vim.api.nvim_create_augroup("UserChecktime", {}),
+    callback = function()
+      if vim.o.buftype ~= "nofile" then vim.cmd("checktime") end
+    end,
+  })
+
   -- กด q ปิดหน้าต่างชั่วคราว (blame, help, quickfix, ...) — LazyVim close_with_q
   vim.api.nvim_create_autocmd("FileType", {
     group = vim.api.nvim_create_augroup("UserCloseWithQ", {}),

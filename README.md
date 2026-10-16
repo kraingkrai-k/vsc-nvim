@@ -62,7 +62,7 @@ lua/config/options.lua      Vim options
 lua/config/keymaps.lua      Core keymaps (env-specific)
 lua/plugins/common.lua      Shared plugins (4)
 lua/plugins/vscode.lua      VS Code keymaps
-lua/plugins/standalone.lua  Standalone UI + LSP (22)
+lua/plugins/standalone.lua  Standalone UI + LSP (23)
 ```
 
 ## Plugins
@@ -76,9 +76,9 @@ lua/plugins/standalone.lua  Standalone UI + LSP (22)
 | flash.nvim | `s` jump, `S` treesitter select |
 | nvim-spider | `<A-w>/<A-e>/<A-b>` camelCase-aware |
 
-### Standalone only - 22 plugins
+### Standalone only - 23 plugins
 
-tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks (lazygit, bufdelete, images), nvim-treesitter (`main` branch), nvim-treesitter-textobjects, mini.ai, nvim-ts-autotag (JSX tags), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`), grug-far (search & replace), trouble (diagnostics list), neotest + neotest-vitest (Vitest runner)
+tokyonight, lualine, bufferline, nvim-tree, telescope (+fzf-native), gitsigns, which-key, nvim-lspconfig, mason, mason-lspconfig, render-markdown, snacks (lazygit, bufdelete, images), nvim-treesitter (`main` branch), nvim-treesitter-textobjects, mini.ai, nvim-ts-autotag (JSX tags), ts-comments (JSX `{/* */}`), blink.cmp (completion), conform (prettier from project `node_modules`), grug-far (search & replace), trouble (diagnostics list), claudecode (Claude Code IDE integration), neotest + neotest-vitest (Vitest runner)
 
 Format on save runs prettier only in projects with a prettier config (`.prettierrc*` or `"prettier"` in `package.json`).
 
@@ -104,20 +104,27 @@ Leader: `<Space>`
 | `<leader>\|` | Split vertical |
 | `<leader>-` | Split horizontal |
 | `<leader>wd` | Close window |
+| `<leader>wm` | Zoom window fullscreen / press again to restore (standalone) |
 | `<C-h/j/k/l>` | Navigate windows |
 
 ### Find & Search
 
 | Key | Action |
 |-----|--------|
+| `<leader><leader>` | Find files (standalone; VS Code = quick open) |
+| `<leader>,` | Switch buffer, most recent first (standalone) |
 | `<leader>ff` | Find files |
+| `<leader>fF` | Find files including gitignored (standalone, custom) |
 | `<leader>fg` | Live grep |
 | `<leader>fb` | Buffers |
 | `<leader>fr` | Recent files |
 | `<leader>e` | File explorer |
 | `<leader>/` / `<leader>sg` | Grep (standalone) |
+| `<leader>sG` | Grep including gitignored (standalone, custom) |
 | `<leader>sw` | Grep word under cursor / selection (standalone) |
 | `<leader>sR` | Resume last search (standalone) |
+| `<leader>sb` | Fuzzy search in current file (standalone) |
+| `<M-p>` (in picker) | Toggle preview so the list gets full width (standalone) |
 | `<leader>ss` | Symbols in file |
 | `<leader>sS` | Symbols in project |
 | `<leader>sr` | Search & replace in project — grug-far (standalone) |
@@ -143,6 +150,18 @@ Leader: `<Space>`
 | `<leader>xx` / `<leader>xX` | Diagnostics project / buffer — Trouble (standalone) |
 | `<leader>xQ` / `<leader>xL` | Quickfix / location list — Trouble (standalone) |
 | `<leader>cs` / `<leader>cS` | Symbols / LSP refs — Trouble (standalone) |
+
+### AI — Claude Code (Standalone, claudecode.nvim)
+
+Claude รันใน pane แยกของ cmux ไม่เปิด terminal ใน nvim (libvterm วาด TUI เพี้ยน โดยเฉพาะภาษาไทย):
+เปิด nvim ก่อน แล้วใน pane อื่นที่ cwd เดียวกันรัน `claude --ide` (ต่อ session ล่าสุด `-c`, เลือก session `-r`)
+
+| Key | Action |
+|-----|--------|
+| `<leader>ab` | ส่งไฟล์ปัจจุบันเข้า context |
+| `<leader>as` | (visual) ส่ง selection / (ใน NvimTree) ส่งไฟล์ใต้ cursor |
+| `<leader>aa` / `<leader>ad` | Accept / Deny diff ที่ Claude เสนอ |
+| `/ide` (ใน claude) | Claude ที่รันใน pane อื่น (cmux) → เลือก Neovim เพื่อให้เห็นไฟล์/บรรทัด/selection |
 
 ### Git
 

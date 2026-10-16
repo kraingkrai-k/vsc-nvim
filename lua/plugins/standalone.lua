@@ -11,6 +11,13 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      require("tokyonight").setup({
+        on_highlights = function(hl, c)
+          -- path ใน picker (filename_first) เดิมเป็น #545c7e บนพื้น #1e2030 = contrast 2.5:1 แทบมองไม่เห็น
+          -- fg_dark (#828bb8) = ~4.9:1 อ่านออก แต่ยังจางกว่าชื่อไฟล์
+          hl.TelescopeResultsComment = { fg = c.fg_dark }
+        end,
+      })
       vim.cmd([[colorscheme tokyonight]])
     end,
   },
@@ -29,7 +36,7 @@ return {
         sections = {
           lualine_a = { "mode" },
           lualine_b = { "branch", "diff", "diagnostics" },
-          lualine_c = { "filename" },
+          lualine_c = { { "filename", path = 1 } }, -- path จาก cwd เช่น src/app.controller.ts
           lualine_x = { "encoding", "fileformat", "filetype" },
           lualine_y = { "progress" },
           lualine_z = { "location" },
@@ -54,6 +61,7 @@ return {
           left_mouse_command = "buffer %d",
           separator_style = "thin",
           always_show_bufferline = true,
+          max_name_length = 30, -- default 18 ตัดชื่อไฟล์ยาวเป็น app.controller.…
         },
       })
     end,
@@ -70,7 +78,10 @@ return {
       require("nvim-tree").setup({
         disable_netrw = true,
         hijack_netrw = true,
-        view = { width = 30, side = "left" },
+        -- ขยายตามชื่อไฟล์ที่ยาวที่สุด (30–50 คอลัมน์) แทน 30 ตายตัว
+        view = { width = { min = 30, max = 50 }, side = "left" },
+        -- tree ตามไฟล์ที่กำลังเปิดอยู่เสมอ (highlight + กางโฟลเดอร์ให้) เหมือน VS Code
+        update_focused_file = { enable = true },
         renderer = {
           group_empty = true,
           icons = {
@@ -94,8 +105,14 @@ return {
       -- fzf syntax in prompt: 'exact ^prefix suffix$ !negate
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
+    -- lazy-load ตอนเรียก :Telescope ด้วย (LSP keymap gr/gI/gy เรียกผ่าน command ไม่ใช่ keys)
+    cmd = "Telescope",
     keys = {
+      { "<leader><space>", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+      { "<leader>,", "<cmd>Telescope buffers<cr>", desc = "Switch buffer" },
       { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+      -- custom (ไม่ใช่ LazyVim): รวมไฟล์ใน .gitignore ด้วย (node_modules, dist, practice/, .env)
+      { "<leader>fF", "<cmd>Telescope find_files no_ignore=true<cr>", desc = "Find files (+ignored)" },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
@@ -103,9 +120,15 @@ return {
       -- Search (LazyVim standard)
       { "<leader>/", "<cmd>Telescope live_grep<cr>", desc = "Grep" },
       { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Grep" },
+      {
+        "<leader>sG",
+        function() require("telescope.builtin").live_grep({ additional_args = { "--no-ignore" } }) end,
+        desc = "Grep (+ignored)",
+      },
       { "<leader>sw", "<cmd>Telescope grep_string word_match=-w<cr>", desc = "Word under cursor" },
       { "<leader>sw", "<cmd>Telescope grep_string<cr>", mode = "v", desc = "Selection" },
       { "<leader>sR", "<cmd>Telescope resume<cr>", desc = "Resume last search" },
+      { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer lines" },
       { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Symbols (file)" },
       { "<leader>sS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Symbols (project)" },
     },
@@ -116,9 +139,32 @@ return {
           selection_caret = " ",
           -- fd/rg เคารพ .gitignore อยู่แล้ว (node_modules, dist, ...) → กันแค่ .git/ ที่โผล่เพราะ hidden = true
           file_ignore_patterns = { "^%.git/", "/%.git/" },
+          -- grep ค้นไฟล์ซ่อนด้วย (.github/, .env.example, .claude/) ให้ตรงกับ find_files hidden = true
+          vimgrep_arguments = {
+            "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column",
+            "--smart-case", "--hidden", "--glob=!**/.git/*",
+          },
+          -- จอกว้าง ≥ 120 คอลัมน์: list ซ้าย preview ขวา / แคบกว่านั้น: preview บน list เต็มความกว้าง
+          layout_strategy = "flex",
+          layout_config = {
+            width = 0.9,
+            height = 0.9,
+            flex = { flip_columns = 120 },
+            horizontal = { preview_width = 0.5 },
+            vertical = { preview_height = 0.4 },
+          },
+          -- ชื่อไฟล์ขึ้นก่อน folder ตามหลัง (จาง) → อ่านชื่อไฟล์ได้ครบเสมอ
+          path_display = { "filename_first" },
+          mappings = {
+            -- ซ่อน/แสดง preview → list ได้ความกว้างเต็ม (เหมือน <a-p> ของ snacks picker ใน LazyVim)
+            i = { ["<M-p>"] = require("telescope.actions.layout").toggle_preview },
+            n = { ["<M-p>"] = require("telescope.actions.layout").toggle_preview },
+          },
         },
         pickers = {
           find_files = { hidden = true },
+          -- ไฟล์ที่เพิ่งใช้อยู่บนสุด, ไม่แสดงไฟล์ที่เปิดอยู่ตอนนี้ (LazyVim standard)
+          buffers = { sort_mru = true, ignore_current_buffer = true },
         },
       })
       pcall(require("telescope").load_extension, "fzf")
@@ -289,6 +335,8 @@ return {
     keys = {
       -- LazyVim standard: lazygit ใน float, กด e ใน lazygit เปิดไฟล์ใน nvim ตัวนี้ (nvim-remote)
       { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+      -- LazyVim standard: ขยาย window ปัจจุบันเต็มจอ / กดซ้ำเพื่อกลับ
+      { "<leader>wm", function() Snacks.zen.zoom() end, desc = "Zoom window" },
     },
     opts = {
       lazygit = {},
@@ -297,6 +345,26 @@ return {
         -- cmux's embedded Ghostty lacks unicode placeholders: show images in a float on hover
         doc = { inline = vim.env.CMUX_BUNDLED_CLI_PATH == nil },
       },
+    },
+  },
+
+  -- Claude Code IDE integration: Claude CLI เห็นไฟล์/บรรทัด/selection ที่เปิดอยู่ใน nvim (LazyVim extra ai.claudecode)
+  -- Claude รันใน pane อื่น (cmux) → `claude --ide` หรือพิมพ์ /ide แล้วเลือก Neovim
+  -- ไม่เปิด terminal ใน nvim: libvterm วาด TUI ของ Claude เพี้ยน (โดยเฉพาะสระ/วรรณยุกต์ไทย)
+  {
+    "coder/claudecode.nvim",
+    -- โหลดตอน startup: server + lock file (~/.claude/ide/) ต้องมีก่อน /ide จาก terminal ภายนอกจะเห็น
+    event = "VeryLazy",
+    opts = {
+      terminal = { provider = "none" },
+    },
+    keys = {
+      { "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
+      { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+      { "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send to Claude" },
+      { "<leader>as", "<cmd>ClaudeCodeTreeAdd<cr>", desc = "Add file", ft = { "NvimTree" } },
+      { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+      { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
     },
   },
 
